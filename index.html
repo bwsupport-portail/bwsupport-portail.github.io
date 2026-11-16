@@ -1384,7 +1384,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     try {
       if (ENLIGNE) {
         etape("Création du dossier…");
-        const dossier = await serveur("ouvrirDossier", { immat: val("immat"), role });
+        const dossier = await serveur("ouvrirDossier", { immat: val("immat"), role, client: [val("nom").trim().toUpperCase(), val("prenom").trim()].filter(Boolean).join(" ") });
         const liste = DOCS.flatMap(d => files[d.key].map(f => ({ d, f })));
         for (let i = 0; i < liste.length; i++) {
           const { d, f } = liste[i];
