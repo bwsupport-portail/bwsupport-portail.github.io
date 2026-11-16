@@ -32,6 +32,7 @@
   --font-body:"Montserrat",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --cl-text:#FFFFFF; --cl-dim:#4A5F72; --cl-ok:#6FD3A0; --cl-warn:#FF8A80; --cl-alert:#FF5B4F; --cl-alert-bg:rgba(255,91,79,.2); --cl-full:#4CC38A; --cl-focus:#8CB8E8; --cl-tick:#5B7083; --cl-tick-major:#B9C8D6; --plate-ink:#FFFFFF;
   --r-panel:12px; --r-field:8px;
+  --ac-bg:#FFF1C2; --ac-ink:#5C4300; --ac-line:#C99A00;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -47,6 +48,7 @@
     --focus:#7AB0EA; --focus-ring:rgba(122,176,234,.3);
     --drop:#131E28; --drop-hover:#18293A;
     --note-bg:#1C3254; --note-line:#344B6B; --note-ink:#DDE6F2;
+    --ac-bg:#4A3A08; --ac-ink:#FFE7A3; --ac-line:#C99A00;
     color-scheme:dark;
   }
 }
@@ -63,6 +65,7 @@
   --focus:#7AB0EA; --focus-ring:rgba(122,176,234,.3);
   --drop:#131E28; --drop-hover:#18293A;
   --note-bg:#1C3254; --note-line:#344B6B; --note-ink:#DDE6F2;
+  --ac-bg:#4A3A08; --ac-ink:#FFE7A3; --ac-line:#C99A00;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -354,7 +357,25 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
 .foot-t{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#FFFFFF;margin:0 0 8px}
 .foot p{margin:0}
 .foot a{color:#FFFFFF;text-underline-offset:3px}
+.foot-links{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:22px;padding:0;list-style:none}
+.foot-links a{font-weight:600;color:#FFFFFF}
+.foot .lien-legal{color:#FFFFFF;font-weight:600}
 .foot-legal{border-top:1px solid rgba(255,255,255,.16);margin-top:24px;padding-top:16px;font-size:11.5px;color:#A9B8CD}
+/* Fenêtres d’information légale */
+.a-confirmer{background:var(--ac-bg);color:var(--ac-ink);border:1px dashed var(--ac-line);border-radius:4px;padding:0 4px;font-weight:600}
+dialog.legal{width:min(760px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:0;border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);box-shadow:0 24px 60px rgba(9,20,40,.35)}
+dialog.legal::backdrop{background:rgba(9,20,40,.55)}
+.legal-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:18px 22px;background:var(--surface);border-bottom:1px solid var(--line)}
+.legal-head h2{font-size:20px;color:var(--heading)}
+.legal-close{flex:none;min-width:44px;min-height:44px;border:1px solid var(--line-strong);border-radius:10px;background:var(--surface-2);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
+.legal-close:focus-visible,.foot a:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.legal-body{padding:6px 22px 24px;font-size:15px;line-height:1.6}
+.legal-body h3{font-size:15.5px;color:var(--heading);margin:20px 0 6px}
+.legal-body p,.legal-body ul{margin:0 0 10px}
+.legal-body ul{padding-left:20px}
+.legal-body a{color:var(--focus)}
+.legal-maj{margin-top:18px!important;font-size:13.5px;color:var(--muted)}
+@media (max-width:760px){.legal-head{padding:14px 16px}.legal-body{padding:4px 16px 20px}}
 @media (max-width:760px){.foot-cols{grid-template-columns:1fr;gap:18px}.foot-in{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}}
 
 /* Tablette et mobile */
@@ -804,7 +825,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
             <p class="send-status" id="sendStatus" aria-live="polite"></p>
           </div>
           <p class="error send-error" id="sendError" role="alert"></p>
-          <p class="send-note">Les informations et documents transmis servent uniquement à l’étude de ce dossier.</p>
+          <p class="send-note">Les informations et pièces transmises sont traitées par BW Support, gestionnaire des contrats BEWEAL, pour l’étude et la gestion de votre demande de prise en charge et la lutte contre la fraude. Elles sont destinées à BW Support, à BEWEAL et à l’assureur. Vous disposez notamment de droits d’accès, de rectification, d’opposition et d’effacement : dpo@bwsupport.fr. En savoir plus : <a href="#donnees-personnelles" data-legal="donnees-personnelles">Données personnelles</a>.</p>
         </div>
 
       </div>
@@ -836,16 +857,127 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
       </div>
       <div>
         <p class="foot-t">Réclamations</p>
-        <p>Par écrit à contact@bwsupport.fr. Accusé de réception sous 10 jours, réponse sous 2 mois au plus.</p>
+        <p>Par écrit à contact@bwsupport.fr ou par courrier au siège de BW Support. Accusé de réception sous dix jours ouvrables, réponse sous deux mois au plus. À défaut d’accord, La Médiation de l’Assurance peut être saisie. <a class="lien-legal" href="#reclamations-mediation" data-legal="reclamations-mediation">En savoir plus</a>.</p>
       </div>
       <div>
         <p class="foot-t">Données personnelles</p>
-        <p>Les informations et pièces transmises servent uniquement à l’étude de la demande de prise en charge par BW Support. Pour exercer vos droits (accès, rectification, effacement) : dpo@bwsupport.fr.</p>
+        <p>Vos données sont traitées par BW Support pour l’étude et la gestion de votre demande de prise en charge. Exercice de vos droits : dpo@bwsupport.fr. <a class="lien-legal" href="#donnees-personnelles" data-legal="donnees-personnelles">En savoir plus</a>.</p>
       </div>
     </div>
-    <p class="foot-legal">BW Support SAS · Capital 1 000 € · Siège : 144 rue du Faubourg des Trois Maisons, 54000 Nancy · Courtier en assurance · ORIAS n° 26013060 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>) · Sous le contrôle de l’ACPR, 4 place de Budapest, 75436 Paris Cedex 09</p>
+    <ul class="foot-links" aria-label="Informations légales">
+      <li><a href="#mentions-legales" data-legal="mentions-legales">Mentions légales</a></li>
+      <li aria-hidden="true">·</li>
+      <li><a href="#donnees-personnelles" data-legal="donnees-personnelles">Données personnelles</a></li>
+      <li aria-hidden="true">·</li>
+      <li><a href="#reclamations-mediation" data-legal="reclamations-mediation">Réclamations et médiation</a></li>
+    </ul>
+    <p class="foot-legal">Portail édité par BW Support, SAS au capital de 1 000 €, siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy, 109 578 187 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 26013060 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>). Contrats distribués par BEWEAL, SASU au capital de 1 000 €, siège social : 200 avenue de la Libération, 54000 Nancy, 949 855 126 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 23003065 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>). Garanties assurées par HDI Global SE. BW Support et BEWEAL sont soumises au contrôle de l’ACPR, 4 place de Budapest, CS 92459, 75436 Paris Cedex 09.</p>
   </div>
 </footer>
+
+<!-- Livrable 2 : Mentions légales -->
+<dialog class="legal" id="mentions-legales" aria-labelledby="titre-mentions">
+  <div class="legal-head"><h2 id="titre-mentions">Mentions légales</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
+  <div class="legal-body">
+    <h3>1. Éditeur du portail</h3>
+    <p>BW Support — société par actions simplifiée (SAS) au capital de 1 000 € — Siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy — 109 578 187 RCS Nancy — SIRET 109 578 187 00014 — TVA FR21 109 578 187 — Tél. 01 89 71 39 36 — contact@bwsupport.fr — Courtier en assurance, ORIAS n° 26013060.</p>
+    <p>Directeur de la publication : Valentin MULLER, Directeur Général de BW Support.</p>
+    <h3>2. Hébergement</h3>
+    <p>Page du portail : GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis — <a href="https://support.github.com" target="_blank" rel="noopener">support.github.com</a>.</p>
+    <p>Réception et stockage des informations et des pièces déposées : services Google Workspace de BW Support, fournis par Google Cloud France, 8 rue de Londres, 75009 Paris — <a href="https://support.google.com" target="_blank" rel="noopener">support.google.com</a>.</p>
+    <h3>3. Qualité des intervenants</h3>
+    <p><strong>BEWEAL</strong> — société par actions simplifiée à associé unique (SASU) au capital de 1 000 € — Siège social : 200 avenue de la Libération, 54000 Nancy — 949 855 126 RCS Nancy — Courtier en assurance, ORIAS n° 23003065. BEWEAL distribue les contrats, sous la marque BeWeal.</p>
+    <p><strong>BW Support</strong> — société par actions simplifiée (SAS) au capital de 1 000 € — Siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy — 109 578 187 RCS Nancy — SIRET 109 578 187 00014 — TVA FR21 109 578 187 — Courtier en assurance, ORIAS n° 26013060. BW Support assure la gestion des contrats et l’instruction des demandes de prise en charge ; elle édite ce portail. Aucune entreprise d’assurance ne détient de participation, directe ou indirecte, dans le capital de BW Support, et BW Support n’en détient aucune dans une entreprise d’assurance.</p>
+    <p><strong>HDI Global SE</strong> (Société européenne), au capital de 125.000.000 Euros, dont le siège social est situé à HDI-Platz – 30659 – Hanovre – Allemagne, pour les CONTRATS souscrits ou exécutés en France par le biais de sa succursale HDI Global SE, sise Tour Trinity 1 bis place de La Défense, CS 20298, 92035 Paris La Défense Cedex, immatriculée sous le numéro RCS : Nanterre 478 913 882, opérant en France sous le régime de la Liberté d’établissement. Autorité de contrôle de l’Etat d’origine : BaFin « Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin) » numéro BaFin : 5096. HDI Global SE est l’entreprise d’assurance qui porte le risque.</p>
+    <h3>4. Autorité de contrôle et registre</h3>
+    <p>BW Support et BEWEAL sont soumises au contrôle de l’Autorité de contrôle prudentiel et de résolution (ACPR), 4 place de Budapest, CS 92459, 75436 Paris Cedex 09. Leurs immatriculations sont vérifiables sur le registre de l’ORIAS : <a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>.</p>
+    <h3>5. Pour en savoir plus</h3>
+    <p>Voir aussi <a href="#donnees-personnelles" data-legal="donnees-personnelles">Données personnelles</a> et <a href="#reclamations-mediation" data-legal="reclamations-mediation">Réclamations et médiation</a>.</p>
+    <p class="legal-maj">Dernière mise à jour : 16 novembre 2026</p>
+  </div>
+</dialog>
+
+<!-- Livrable 3 : Données personnelles (article 13 du RGPD) -->
+<dialog class="legal" id="donnees-personnelles" aria-labelledby="titre-donnees">
+  <div class="legal-head"><h2 id="titre-donnees">Données personnelles</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
+  <div class="legal-body">
+    <h3>a) Qui traite vos données</h3>
+    <p>Responsable du traitement : BEWEAL, SASU au capital de 1 000 €, siège social : 200 avenue de la Libération, 54000 Nancy, 949 855 126 RCS Nancy. BW Support, gestionnaire des contrats BEWEAL et éditeur de ce portail, traite les données pour le compte de BEWEAL, en qualité de sous-traitant. Délégué à la protection des données : dpo@bwsupport.fr ou par courrier au siège de BW Support, 144 rue du Faubourg des Trois Maisons, 54000 Nancy.</p>
+    <h3>b) Données traitées</h3>
+    <p>Identité et coordonnées du titulaire, du garage et de son interlocuteur ; véhicule ; circonstances de la panne ; pièces déposées (diagnostic, devis, certificat d’immatriculation, suivi d’entretien, contrôle technique, photo du compteur, certificat de cession, RIB du garage, photos).</p>
+    <h3>c) Finalités et bases juridiques</h3>
+    <ul>
+      <li>Instruction et gestion de la demande (exécution du contrat d’assurance) ;</li>
+      <li>règlement des réparations au garage ;</li>
+      <li>lutte contre la fraude à l’assurance (intérêt légitime) ;</li>
+      <li>traitement des réclamations et respect des obligations légales et réglementaires (obligation légale).</li>
+    </ul>
+    <h3>d) Caractère obligatoire</h3>
+    <p>Les éléments marqués « Obligatoire » conditionnent l’étude du dossier.</p>
+    <h3>e) Destinataires</h3>
+    <p>Personnel habilité de BW Support, BEWEAL, HDI Global SE, prestataires techniques (GitHub, pour l’hébergement de la page ; Google, pour la réception et le stockage des informations et des pièces, la messagerie et les polices de caractères), autorités légalement habilitées.</p>
+    <h3>f) Transferts hors Union européenne</h3>
+    <p>La page du portail est hébergée par GitHub, Inc. et ses polices de caractères sont fournies par Google LLC, sociétés établies aux États-Unis : votre adresse IP de connexion leur est transmise lors de l’affichage de la page. Les informations et pièces déposées sont reçues et stockées dans les services Google Workspace de BW Support ; certaines données peuvent être traitées par Google hors de l’Union européenne. Ces transferts sont encadrés par les garanties prévues par le RGPD : décision d’adéquation de la Commission européenne relative au cadre de protection des données UE–États-Unis (« Data Privacy Framework »), auquel GitHub, Inc. et Google LLC adhèrent, et clauses contractuelles types de la Commission européenne.</p>
+    <h3>g) Durées de conservation</h3>
+    <p>Les données sont conservées pendant la durée nécessaire à l’étude et à la gestion de la demande de prise en charge, puis archivées pendant la durée des délais de prescription légaux applicables, avant d’être supprimées.</p>
+    <h3>h) Vos droits</h3>
+    <p>Vous disposez des droits d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité, ainsi que du droit de définir des directives relatives au sort de vos données après votre décès. Ils s’exercent auprès de dpo@bwsupport.fr. Vous pouvez introduire une réclamation auprès de la CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>.</p>
+    <h3>i) Décision automatisée</h3>
+    <p>Aucune décision fondée exclusivement sur un traitement automatisé n’est prise : chaque demande est étudiée par un gestionnaire. Le portail vérifie seulement que les pièces obligatoires sont jointes avant l’envoi.</p>
+    <h3>j) Stockage sur votre appareil</h3>
+    <p>Pour vous éviter de tout ressaisir, le portail enregistre la saisie en cours dans la mémoire de votre navigateur (« localStorage »), sur votre appareil uniquement : les champs du formulaire, associés à l’immatriculation du véhicule et à la partie remplie (garage ou client), et la date de la saisie. Les fichiers joints, le choix de la partie et la case de certification ne sont pas enregistrés. Cette saisie n’est transmise qu’au moment où vous envoyez le dossier. Elle est effacée après un envoi réussi ou avec le bouton « Effacer et recommencer », et n’est plus proposée au-delà de 30 jours. Le portail ne dépose aucun cookie et n’utilise aucun outil de mesure d’audience.</p>
+  </div>
+</dialog>
+
+<!-- Livrable 4 : Réclamations et médiation -->
+<dialog class="legal" id="reclamations-mediation" aria-labelledby="titre-reclamations">
+  <div class="legal-head"><h2 id="titre-reclamations">Réclamations et médiation</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
+  <div class="legal-body">
+    <p>Toute réclamation relative à la gestion d’un dossier peut être adressée à BW Support :</p>
+    <ul>
+      <li>par courriel à contact@bwsupport.fr, en indiquant « Réclamation » en objet ;</li>
+      <li>par courrier à BW Support – Service Réclamations, 144 rue du Faubourg des Trois Maisons, 54000 Nancy.</li>
+    </ul>
+    <p>Si elle n’a pu être résolue immédiatement, la réclamation doit être formulée par écrit. BW Support en accuse réception dans un délai maximal de dix jours ouvrables à compter de son envoi, sauf réponse apportée dans ce délai, et y répond au plus tard dans les deux mois suivant l’envoi de la première réclamation écrite.</p>
+    <p>Passé ce délai de deux mois, que vous ayez ou non reçu une réponse, le titulaire de la garantie agissant en qualité de consommateur peut saisir gratuitement La Médiation de l’Assurance : <a href="https://www.mediation-assurance.org" target="_blank" rel="noopener">www.mediation-assurance.org</a> ou TSA 50110, 75441 Paris Cedex 09.</p>
+  </div>
+</dialog>
+
+<script>
+// Fenêtres d’information légale : ouvertes en un clic depuis le pied de page, ou par un lien direct (#mentions-legales…)
+(function () {
+  "use strict";
+  var IDS = ["mentions-legales", "donnees-personnelles", "reclamations-mediation"];
+  var dernierDeclencheur = null;
+  function ouvrir(id, declencheur) {
+    var d = document.getElementById(id);
+    if (!d || typeof d.showModal !== "function") return false;
+    IDS.forEach(function (autre) { var x = document.getElementById(autre); if (x && x.open && x !== d) x.close(); });
+    if (declencheur) dernierDeclencheur = declencheur;
+    if (!d.open) d.showModal();
+    d.scrollTop = 0;
+    var fermer = d.querySelector("[data-fermer]"); if (fermer) fermer.focus();
+    return true;
+  }
+  document.addEventListener("click", function (e) {
+    var lien = e.target.closest && e.target.closest("[data-legal]");
+    if (lien && ouvrir(lien.getAttribute("data-legal"), lien)) { e.preventDefault(); return; }
+    var btn = e.target.closest && e.target.closest("[data-fermer]");
+    if (btn) { var d = btn.closest("dialog"); if (d) d.close(); return; }
+    if (e.target.tagName === "DIALOG" && e.target.classList.contains("legal")) {
+      var r = e.target.getBoundingClientRect();
+      if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) e.target.close();
+    }
+  });
+  IDS.forEach(function (id) {
+    var d = document.getElementById(id);
+    if (d) d.addEventListener("close", function () { if (dernierDeclencheur && document.contains(dernierDeclencheur)) dernierDeclencheur.focus(); });
+  });
+  function depuisAdresse() { var h = (location.hash || "").slice(1); if (IDS.indexOf(h) !== -1) ouvrir(h, null); }
+  window.addEventListener("hashchange", depuisAdresse);
+  depuisAdresse();
+})();
+</script>
 
 <script>
 /* ============================================================
@@ -929,7 +1061,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       missing: "Ajoutez la déclaration de cession du véhicule.",
       exemple: ["Cerfa n° 15776 complet, signé par le vendeur et par l’acheteur", "Date et heure de la vente lisibles", "Kilométrage au jour de la vente", "Vendeur professionnel : son tampon ou sa raison sociale"] },
     { key: "rib", reqRoles: ["garage"], bloquant: true, only: "garage", icon: "i-card", short: "RIB", miss: "le RIB du garage",
-      title: "RIB du garage", desc: "Une photo ou un PDF du relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail.",
+      title: "RIB du garage", desc: "Une photo ou un PDF du relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail. Il sert exclusivement au règlement des réparations prises en charge.",
       missing: "Ajoutez le RIB du garage (une photo suffit)." },
     { key: "compteur", req: true, bloquant: true, icon: "i-gauge", short: "Compteur", miss: "la photo du compteur",
       title: "Photo du compteur", desc: "Le tableau de bord, contact mis, avec le kilométrage lisible.",
