@@ -30,7 +30,7 @@
   --plate:#1F4FA0;
   --font-display:"Montserrat",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --font-body:"Montserrat",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  --cl-text:#FFFFFF; --cl-dim:#4A5F72; --cl-ok:#6FD3A0; --cl-warn:#B9D3F4; --cl-full:#4CC38A; --cl-focus:#8CB8E8; --cl-tick:#5B7083; --cl-tick-major:#B9C8D6; --plate-ink:#FFFFFF;
+  --cl-text:#FFFFFF; --cl-dim:#4A5F72; --cl-ok:#6FD3A0; --cl-warn:#FF8A80; --cl-alert:#FF5B4F; --cl-alert-bg:rgba(255,91,79,.2); --cl-full:#4CC38A; --cl-focus:#8CB8E8; --cl-tick:#5B7083; --cl-tick-major:#B9C8D6; --plate-ink:#FFFFFF;
   --r-panel:12px; --r-field:8px;
 }
 @media (prefers-color-scheme:dark){
@@ -116,10 +116,17 @@ main{min-width:0}
 .light{width:100%;display:flex;align-items:center;gap:10px;padding:4px 6px;border:0;background:transparent;color:inherit;font:inherit;text-align:left;border-radius:10px;cursor:pointer}
 .light:hover{background:rgba(255,255,255,.05)}
 .light:focus-visible{outline:2px solid var(--cl-focus);outline-offset:1px}
-.light-icon{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.04);color:var(--cl-dim);transition:color .25s,background .25s}
+.light-icon{position:relative;width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgba(255,255,255,.04);color:var(--cl-dim);transition:color .25s,background .25s}
 .light-icon .ic{width:20px;height:20px;transition:filter .25s}
-.light.is-on .light-icon{color:#B9D3F4;background:linear-gradient(135deg,rgba(156,192,238,.28),rgba(63,109,174,.18))}
-.light.is-on .light-icon .ic{filter:drop-shadow(0 0 4px rgba(156,192,238,.8))}
+.light.is-on .light-icon{color:var(--cl-alert);background:var(--cl-alert-bg);box-shadow:inset 0 0 0 1px rgba(255,91,79,.45)}
+.light.is-on .light-icon .ic{filter:drop-shadow(0 0 4px rgba(255,91,79,.75))}
+/* Triangle d’alerte clignotant sur un élément manquant (arrêté si l’appareil demande moins d’animations) */
+.light-alerte{position:absolute;right:-5px;top:-5px;width:16px;height:16px;display:none;color:var(--cl-alert);filter:drop-shadow(0 0 3px rgba(255,91,79,.9))}
+.light-alerte .ic{width:16px;height:16px;filter:none!important}
+.light.is-on .light-alerte{display:block;animation:voyant-alerte 1.1s ease-in-out infinite}
+.light.is-on .light-icon{animation:voyant-fond 1.1s ease-in-out infinite}
+@keyframes voyant-alerte{0%,100%{opacity:1}50%{opacity:.15}}
+@keyframes voyant-fond{0%,100%{background:var(--cl-alert-bg)}50%{background:rgba(255,91,79,.06)}}
 .light-text{flex:1;min-width:0;display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .light-name{font-size:13.5px;font-weight:600;color:var(--cl-text);line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .light-state{flex:none;font-size:12px;line-height:1.25;white-space:nowrap;color:var(--cl-ok)}
@@ -362,10 +369,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
   .cluster-head,.gauge-block,.cluster-hint,.light-group-title{display:none}
   .mini-row{display:block}
   .light-groups{display:flex;justify-content:space-between;gap:10px}
-  .light-group{margin:0}
-  .lights{display:flex;gap:2px}
-  .light{width:auto;padding:1px;border-radius:8px}
-  .light-icon{width:30px;height:30px;border-radius:8px}
+  .light-group{margin:0;min-width:0;flex:var(--nb,4) 1 0}
+  .lights{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:3px;padding-top:5px}
+  .lights li{min-width:0;display:flex;justify-content:center}
+  .light{width:100%;max-width:34px;padding:1px;border-radius:8px;justify-content:center}
+  .light-icon{width:100%;max-width:30px;height:30px;border-radius:8px}
+  .light-alerte{right:-4px;top:-5px;width:13px;height:13px}
+  .light-alerte .ic{width:13px;height:13px}
   .light-icon .ic{width:18px;height:18px}
   .light-text{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
   .mini-foot{display:flex;align-items:center;gap:12px;margin-top:8px}
@@ -394,8 +404,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
   .plate{max-width:none}
 }
 @media (max-width:370px){
-  .lights{gap:1px}
-  .light-icon{width:27px;height:27px}
+  .lights{gap:2px}
+  .light-icon{height:27px}
   .light-icon .ic{width:16px;height:16px}
   .light-groups{gap:6px}
 }
@@ -417,6 +427,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></symbol>
   <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M4.5 17a8 8 0 1 1 15 0"/><path d="M12 13l3.5-3.5"/><circle cx="12" cy="13" r="1"/></symbol>
   <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.5 8.5 12 4l4.5 4.5"/><path d="M4 15v4.5h16V15"/></symbol>
+  <symbol id="i-alerte" viewBox="0 0 24 24"><path d="M12 2.5 23 21.5H1z" fill="currentColor" stroke="none"/><path d="M12 9v6" stroke="#13294B" stroke-width="2.4" stroke-linecap="round" fill="none"/><circle cx="12" cy="18.3" r="1.4" fill="#13294B" stroke="none"/></symbol>
   <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
   <symbol id="i-x" viewBox="0 0 24 24"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></symbol>
   <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></symbol>
@@ -469,7 +480,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
       <div class="mini-bar"><i id="miniBar"></i></div>
       <span class="mini-pct" id="miniPct">0 %</span>
     </div>
-    <p class="cluster-hint">Un voyant bleu allumé signale un élément manquant. Il s’éteint dès que l’élément est fourni. Cliquez sur un voyant pour y accéder.</p>
+    <p class="cluster-hint">Un voyant rouge clignotant signale un élément manquant. Il s’éteint dès que l’élément est fourni. Cliquez sur un voyant pour y accéder.</p>
   </aside>
 
   <main id="main">
@@ -1078,12 +1089,13 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   }
   function lightHTML(key, name, icon, target) {
     return `<li><button type="button" class="light is-on" data-key="${key}" data-target="${target}">
-      <span class="light-icon"><svg class="ic"><use href="#${icon}"/></svg></span>
+      <span class="light-icon"><svg class="ic"><use href="#${icon}"/></svg><span class="light-alerte" aria-hidden="true"><svg class="ic"><use href="#i-alerte"/></svg></span></span>
       <span class="light-text"><span class="light-name">${name}</span><span class="light-state"></span></span></button></li>`;
   }
   function buildLights() {
     $("#lightsInfo").innerHTML = orderedSections().map(s => lightHTML(s.key, pick(s.name), s.icon, s.step)).join("");
     $("#lightsDocs").innerHTML = DOCS.filter(d => d.req).map(d => lightHTML(d.key, d.short, d.icon, `row-${d.key}`)).join("");
+    ["#lightsInfo", "#lightsDocs"].forEach(id => { const ul = $(id); ul.parentNode.style.setProperty("--nb", ul.children.length || 1); });
     setLights(lastState);
   }
   function setLights(st, forceOn = false) {
