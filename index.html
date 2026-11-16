@@ -753,7 +753,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
                 <li data-aide="ensuite"><span><b>Ensuite</b> : arrêt, remorquage, a continué à rouler</span></li>
               </ul>
               <p class="error" id="err-description"></p>
-              <p class="counter" id="counter-description">0 caractère, 80 minimum</p>
+              <p class="counter" id="counter-description">0 caractère, 20 minimum</p>
             </div>
           </div>
         </fieldset>
@@ -924,7 +924,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     energie: "Choisissez l’énergie du véhicule.", mise_circulation: "Indiquez une date qui n’est pas dans le futur.",
     date_achat: "Indiquez la date d’achat (elle ne peut pas être dans le futur).", km_achat: "Indiquez un kilométrage en chiffres.",
     date_panne: "Indiquez la date de la panne (elle ne peut pas être dans le futur).", km: "Indiquez le kilométrage au moment de la panne.",
-    roulage_apres: "Choisissez une réponse.", description: "Décrivez la panne en 80 caractères minimum.",
+    roulage_apres: "Choisissez une réponse.", description: "Décrivez la panne en 20 caractères minimum.",
     date_depot: "Indiquez une date qui n’est pas dans le futur.", montant_devis: "Indiquez un montant en euros.",
     certification: "Cochez la case pour confirmer l’exactitude des informations."
   };
@@ -968,7 +968,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     nom: min2, prenom: min2, email: isEmail, telephone: isTel,
     siret: isSiret, naf: v => /^\d{2}\.?\d{2}[A-Z]$/i.test(v.trim()),
     immat: isImmat, marque: min2, modele: filled,
-    date_panne: isDate, km: v => (toInt(v) || 0) > 0, roulage_apres: filled, description: v => v.trim().length >= 80,
+    date_panne: isDate, km: v => (toInt(v) || 0) > 0, roulage_apres: filled, description: v => v.trim().length >= 20,
     vehicule_roulant: () => true, remorque: () => true
   };
 
@@ -1275,8 +1275,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   function updateCounter() {
     updateAidePanne();
     const n = val("description").trim().length, c = $("#counter-description");
-    c.textContent = `${n} caractère${n > 1 ? "s" : ""}${n < 80 ? `, 80 minimum` : ""}`;
-    c.classList.toggle("ok", n >= 80);
+    c.textContent = `${n} caractère${n > 1 ? "s" : ""}${n < 20 ? `, 20 minimum` : ""}`;
+    c.classList.toggle("ok", n >= 20);
   }
 
   /* ---------- Avancement ---------- */
