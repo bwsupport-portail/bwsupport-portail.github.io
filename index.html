@@ -143,6 +143,15 @@ main{min-width:0}
 .intro h1{font-size:36px;font-weight:800;letter-spacing:-.01em;color:var(--heading);margin-bottom:14px}
 .intro p{color:var(--ink-2);max-width:62ch}
 .intro p + p{margin-top:10px}
+.intro .accroche{font-size:18px;font-weight:700;color:var(--heading);line-height:1.45;margin-bottom:10px;padding-left:14px;border-left:3px solid var(--focus)}
+.msg-partie{margin:14px 0 0;padding:12px 16px;border-radius:10px;background:var(--note-bg);color:var(--note-ink);font-size:15px;font-weight:600;line-height:1.5}
+.note-devis{padding:16px 18px;border:1px solid var(--line-strong);border-left:4px solid var(--focus);border-radius:10px;background:var(--surface-2);color:var(--ink-2);font-size:14.5px;line-height:1.6}
+.note-devis h3{font-size:16px;color:var(--heading);margin:0 0 8px}
+.note-devis h4{font-size:14.5px;color:var(--heading);margin:14px 0 6px}
+.note-devis p{margin:0}
+.note-devis ol{margin:0;padding-left:20px}
+.note-devis li + li{margin-top:4px}
+.ex-rappel{margin:0 0 10px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
 .keep{display:flex;gap:12px;align-items:flex-start;margin-top:18px;padding:14px 16px;border-left:3px solid var(--marine);background:var(--surface);border-radius:0 10px 10px 0;font-size:14.5px;color:var(--ink-2);max-width:62ch}
 .keep .ic{color:var(--heading);margin-top:1px}
 
@@ -507,6 +516,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
   <main id="main">
     <section class="intro" id="intro">
       <h1>Bienvenue, nous sommes là pour vous accompagner</h1>
+      <p class="accroche">Avec un dossier complet, nous avançons plus vite pour vous.</p>
       <p>Votre demande de prise en charge au titre de votre garantie panne mécanique est entre de bonnes mains. Le garage et le client déposent ici, en quelques minutes, leurs informations et leurs pièces justificatives ; un gestionnaire BW Support étudie ensuite le dossier et revient vers vous par e-mail.</p>
       <div class="keep">
         <svg class="ic"><use href="#i-list"/></svg>
@@ -551,6 +561,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
 
       <section class="who" id="who" hidden aria-labelledby="whoTitle">
         <h2 id="whoTitle">Quelle partie remplissez-vous ?</h2>
+        <p class="msg-partie" id="msgPartie" aria-live="polite" hidden></p>
         <div class="who-cards" role="radiogroup" aria-labelledby="whoTitle" aria-describedby="err-qui">
           <label class="who-card">
             <input type="radio" name="qui" value="garage">
@@ -627,6 +638,16 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
               <label for="date_depot">Entrée du véhicule à l’atelier<span class="opt">facultatif</span></label>
               <input type="date" id="date_depot" name="date_depot" aria-describedby="err-date_depot">
               <p class="error" id="err-date_depot"></p>
+            </div>
+            <div class="span-2 note-devis" id="noteDevis" role="note" aria-labelledby="titreNoteDevis" hidden>
+              <h3 id="titreNoteDevis">Comment votre devis est analysé</h3>
+              <p>Votre devis est contrôlé par le plateau technique de BW Support à partir des données constructeur : références et prix des pièces, temps de main-d’œuvre. La main-d’œuvre est retenue selon le barème du constructeur, pour le remplacement des seules pièces garanties ; la recherche de panne l’est dans la limite prévue au contrat. Une expertise peut être demandée. Le montant de la prise en charge est fixé par BW Support au vu de votre devis et, le cas échéant, du rapport de l’expert : il peut donc différer du montant du devis. La décision est transmise par écrit, au garage comme au client.</p>
+              <h4>Trois règles à respecter</h4>
+              <ol>
+                <li>Aucune réparation avant notre accord écrit : une intervention non acceptée au préalable ne peut pas être prise en charge. En cas d’expertise, attendez le passage de l’expert.</li>
+                <li>Reportez le numéro d’accord et le montant de la prise en charge sur votre facture.</li>
+                <li>Conservez les pièces remplacées et leurs justificatifs d’achat : ils peuvent vous être demandés.</li>
+              </ol>
             </div>
             <div class="field" data-field="montant_devis">
               <label for="montant_devis">Montant du devis TTC<span class="opt">facultatif</span></label>
@@ -817,7 +838,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
         <!-- Envoi -->
         <div class="send" id="send">
           <div class="field" data-field="certification">
-            <label class="cert"><input type="checkbox" id="certification" name="certification" value="oui" aria-describedby="err-certification"><span>Je certifie que les informations fournies sont exactes et que les documents joints sont authentiques.</span></label>
+            <label class="cert"><input type="checkbox" id="certification" name="certification" value="oui" aria-describedby="err-certification"><span id="texteCertification">Je certifie que les informations fournies sont exactes et que les documents joints sont authentiques.</span></label>
             <p class="error" id="err-certification"></p>
           </div>
           <div class="send-row">
@@ -825,7 +846,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
             <p class="send-status" id="sendStatus" aria-live="polite"></p>
           </div>
           <p class="error send-error" id="sendError" role="alert"></p>
-          <p class="send-note">Les informations et pièces transmises sont traitées par BW Support, gestionnaire des contrats BEWEAL, pour l’étude et la gestion de votre demande de prise en charge et la lutte contre la fraude. Elles sont destinées à BW Support, à BEWEAL et à l’assureur. Vous disposez notamment de droits d’accès, de rectification, d’opposition et d’effacement : dpo@bwsupport.fr. En savoir plus : <a href="#donnees-personnelles" data-legal="donnees-personnelles">Données personnelles</a>.</p>
+          <p class="send-note">Les informations et pièces transmises sont collectées par BW Support, gestionnaire des sinistres, pour l’étude et la gestion de votre demande de prise en charge et la lutte contre la fraude. Elles sont traitées par HDI Global SE et BEWEAL, responsables de traitement. Vous disposez notamment de droits d’accès, de rectification, d’opposition et d’effacement : dpo@bwsupport.fr. En savoir plus : <a href="#donnees-personnelles" data-legal="donnees-personnelles">Données personnelles</a>.</p>
         </div>
 
       </div>
@@ -861,7 +882,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
       </div>
       <div>
         <p class="foot-t">Données personnelles</p>
-        <p>Vos données sont traitées par BW Support pour l’étude et la gestion de votre demande de prise en charge. Exercice de vos droits : dpo@bwsupport.fr. <a class="lien-legal" href="#donnees-personnelles" data-legal="donnees-personnelles">En savoir plus</a>.</p>
+        <p>Vos données sont collectées par BW Support pour l’étude et la gestion de votre demande de prise en charge. Exercice de vos droits : dpo@bwsupport.fr. <a class="lien-legal" href="#donnees-personnelles" data-legal="donnees-personnelles">En savoir plus</a>.</p>
       </div>
     </div>
     <ul class="foot-links" aria-label="Informations légales">
@@ -871,11 +892,11 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
       <li aria-hidden="true">·</li>
       <li><a href="#reclamations-mediation" data-legal="reclamations-mediation">Réclamations et médiation</a></li>
     </ul>
-    <p class="foot-legal">Portail édité par BW Support, SAS au capital de 1 000 €, siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy, 109 578 187 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 26013060 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>). Contrats distribués par BEWEAL, SASU au capital de 1 000 €, siège social : 200 avenue de la Libération, 54000 Nancy, 949 855 126 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 23003065 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>). Garanties assurées par HDI Global SE. BW Support et BEWEAL sont soumises au contrôle de l’ACPR, 4 place de Budapest, CS 92459, 75436 Paris Cedex 09.</p>
+    <p class="foot-legal">Portail édité par BW Support, SAS au capital de 1 000 €, siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy, 109 578 187 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 26013060 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>), gestionnaire des sinistres. Contrats distribués par BEWEAL, SASU au capital de 1 000 €, siège social : 200 avenue de la Libération, 54000 Nancy, 949 855 126 RCS Nancy, courtier en assurance immatriculé à l’ORIAS sous le n° 23003065 (<a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>). Garanties assurées par HDI Global SE, succursale française, RCS Nanterre 478 913 882. BW Support et BEWEAL sont soumises au contrôle de l’ACPR, 4 place de Budapest, CS 92459, 75436 Paris Cedex 09.</p>
   </div>
 </footer>
 
-<!-- Livrable 2 : Mentions légales -->
+<!-- A2 : Mentions légales -->
 <dialog class="legal" id="mentions-legales" aria-labelledby="titre-mentions">
   <div class="legal-head"><h2 id="titre-mentions">Mentions légales</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
   <div class="legal-body">
@@ -885,10 +906,10 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
     <h3>2. Hébergement</h3>
     <p>Page du portail : GitHub, Inc. (service GitHub Pages), 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, États-Unis — <a href="https://support.github.com" target="_blank" rel="noopener">support.github.com</a>.</p>
     <p>Réception et stockage des informations et des pièces déposées : services Google Workspace de BW Support, fournis par Google Cloud France, 8 rue de Londres, 75009 Paris — <a href="https://support.google.com" target="_blank" rel="noopener">support.google.com</a>.</p>
-    <h3>3. Qualité des intervenants</h3>
-    <p><strong>BEWEAL</strong> — société par actions simplifiée à associé unique (SASU) au capital de 1 000 € — Siège social : 200 avenue de la Libération, 54000 Nancy — 949 855 126 RCS Nancy — Courtier en assurance, ORIAS n° 23003065. BEWEAL distribue les contrats, sous la marque BeWeal.</p>
-    <p><strong>BW Support</strong> — société par actions simplifiée (SAS) au capital de 1 000 € — Siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy — 109 578 187 RCS Nancy — SIRET 109 578 187 00014 — TVA FR21 109 578 187 — Courtier en assurance, ORIAS n° 26013060. BW Support assure la gestion des contrats et l’instruction des demandes de prise en charge ; elle édite ce portail. Aucune entreprise d’assurance ne détient de participation, directe ou indirecte, dans le capital de BW Support, et BW Support n’en détient aucune dans une entreprise d’assurance.</p>
-    <p><strong>HDI Global SE</strong> (Société européenne), au capital de 125.000.000 Euros, dont le siège social est situé à HDI-Platz – 30659 – Hanovre – Allemagne, pour les CONTRATS souscrits ou exécutés en France par le biais de sa succursale HDI Global SE, sise Tour Trinity 1 bis place de La Défense, CS 20298, 92035 Paris La Défense Cedex, immatriculée sous le numéro RCS : Nanterre 478 913 882, opérant en France sous le régime de la Liberté d’établissement. Autorité de contrôle de l’Etat d’origine : BaFin « Bundesanstalt für Finanzdienstleistungsaufsicht (BaFin) » numéro BaFin : 5096. HDI Global SE est l’entreprise d’assurance qui porte le risque.</p>
+    <h3>3. Intervenants</h3>
+    <p><strong>BEWEAL</strong> — société par actions simplifiée à associé unique (SASU) au capital de 1 000 € — Siège social : 200 avenue de la Libération, 54000 Nancy — 949 855 126 RCS Nancy — Courtier en assurance, ORIAS n° 23003065. Rôle : courtier en assurance, distributeur des contrats (marque « BeWeal »).</p>
+    <p><strong>BW Support</strong> — société par actions simplifiée (SAS) au capital de 1 000 € — Siège social : 144 rue du Faubourg des Trois Maisons, 54000 Nancy — 109 578 187 RCS Nancy — SIRET 109 578 187 00014 — TVA FR21 109 578 187 — Courtier en assurance, ORIAS n° 26013060. Rôle : courtier en assurance, gestionnaire des sinistres ; son plateau technique instruit les demandes ; éditeur du portail. Aucune entreprise d’assurance ne détient de participation, directe ou indirecte, dans le capital de BW Support, et BW Support n’en détient aucune dans une entreprise d’assurance.</p>
+    <p><strong>HDI Global SE</strong> — capital : 125 000 000 € — siège social : HDI-Platz, 30659 Hanovre (Allemagne) — succursale française : Tour Trinity, 1 bis place de la Défense, CS 20298, 92035 Paris La Défense Cedex — RCS Nanterre 478 913 882 — données personnelles : Donnees-Personnelles-FR@hdi.global. Rôle : assureur.</p>
     <h3>4. Autorité de contrôle et registre</h3>
     <p>BW Support et BEWEAL sont soumises au contrôle de l’Autorité de contrôle prudentiel et de résolution (ACPR), 4 place de Budapest, CS 92459, 75436 Paris Cedex 09. Leurs immatriculations sont vérifiables sur le registre de l’ORIAS : <a href="https://www.orias.fr" target="_blank" rel="noopener">www.orias.fr</a>.</p>
     <h3>5. Pour en savoir plus</h3>
@@ -897,49 +918,51 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
   </div>
 </dialog>
 
-<!-- Livrable 3 : Données personnelles (article 13 du RGPD) -->
+<!-- A3 : Données personnelles -->
 <dialog class="legal" id="donnees-personnelles" aria-labelledby="titre-donnees">
   <div class="legal-head"><h2 id="titre-donnees">Données personnelles</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
   <div class="legal-body">
     <h3>a) Qui traite vos données</h3>
-    <p>Responsable du traitement : BEWEAL, SASU au capital de 1 000 €, siège social : 200 avenue de la Libération, 54000 Nancy, 949 855 126 RCS Nancy. BW Support, gestionnaire des contrats BEWEAL et éditeur de ce portail, traite les données pour le compte de BEWEAL, en qualité de sous-traitant. Délégué à la protection des données : dpo@bwsupport.fr ou par courrier au siège de BW Support, 144 rue du Faubourg des Trois Maisons, 54000 Nancy.</p>
+    <p>Les données déposées sur ce portail sont collectées par BW Support, gestionnaire des sinistres. Conformément aux conditions générales du contrat, elles sont traitées par HDI Global SE, assureur, et par BEWEAL, responsables de traitement distincts.</p>
+    <ul>
+      <li>BEWEAL et BW Support : dpo@bwsupport.fr ou 200 avenue de la Libération, 54000 Nancy ;</li>
+      <li>HDI : Donnees-Personnelles-FR@hdi.global ou HDI Global, Protection des données personnelles, succursale française, Tour Trinity, 1 bis place de la Défense, CS 20298, 92035 Paris La Défense Cedex.</li>
+    </ul>
     <h3>b) Données traitées</h3>
     <p>Identité et coordonnées du titulaire, du garage et de son interlocuteur ; véhicule ; circonstances de la panne ; pièces déposées (diagnostic, devis, certificat d’immatriculation, suivi d’entretien, contrôle technique, photo du compteur, certificat de cession, RIB du garage, photos).</p>
     <h3>c) Finalités et bases juridiques</h3>
-    <ul>
-      <li>Instruction et gestion de la demande (exécution du contrat d’assurance) ;</li>
-      <li>règlement des réparations au garage ;</li>
-      <li>lutte contre la fraude à l’assurance (intérêt légitime) ;</li>
-      <li>traitement des réclamations et respect des obligations légales et réglementaires (obligation légale).</li>
-    </ul>
+    <p>Finalités : gestion et exécution des garanties du contrat ; instruction du dossier et règlement du réparateur ; exercice des recours et gestion des réclamations ; lutte contre la fraude à l’assurance ; lutte contre le blanchiment et le financement du terrorisme ; respect des obligations légales et réglementaires.</p>
+    <p>Bases juridiques : le contrat d’assurance ; l’intérêt légitime des responsables de traitement pour la lutte contre la fraude et pour les données du réparateur ; les obligations légales.</p>
     <h3>d) Caractère obligatoire</h3>
     <p>Les éléments marqués « Obligatoire » conditionnent l’étude du dossier.</p>
     <h3>e) Destinataires</h3>
-    <p>Personnel habilité de BW Support, BEWEAL, HDI Global SE, prestataires techniques (GitHub, pour l’hébergement de la page ; Google, pour la réception et le stockage des informations et des pièces, la messagerie et les polices de caractères), autorités légalement habilitées.</p>
-    <h3>f) Transferts hors Union européenne</h3>
-    <p>La page du portail est hébergée par GitHub, Inc. et ses polices de caractères sont fournies par Google LLC, sociétés établies aux États-Unis : votre adresse IP de connexion leur est transmise lors de l’affichage de la page. Les informations et pièces déposées sont reçues et stockées dans les services Google Workspace de BW Support ; certaines données peuvent être traitées par Google hors de l’Union européenne. Ces transferts sont encadrés par les garanties prévues par le RGPD : décision d’adéquation de la Commission européenne relative au cadre de protection des données UE–États-Unis (« Data Privacy Framework »), auquel GitHub, Inc. et Google LLC adhèrent, et clauses contractuelles types de la Commission européenne.</p>
-    <h3>g) Durées de conservation</h3>
-    <p>Les données sont conservées pendant la durée nécessaire à l’étude et à la gestion de la demande de prise en charge, puis archivées pendant la durée des délais de prescription légaux applicables, avant d’être supprimées.</p>
+    <p>Personnels habilités des responsables de traitement et de BW Support, partenaires et sous-traitants liés par contrat, réassureurs, intermédiaires d’assurance, experts, autorités légalement habilitées.</p>
+    <p>Dans le cadre de la lutte contre la fraude, les données relatives aux sinistres peuvent être mutualisées au sein du dispositif de l’ALFA (Agence pour la lutte contre la fraude à l’assurance, 1 rue Jules Lefebvre, 75431 Paris Cedex 09).</p>
+    <h3>f) Transferts</h3>
+    <p>Ces destinataires peuvent être situés hors de l’Union européenne, sur la base d’une décision d’adéquation ou de garanties contractuelles.</p>
+    <p>Pour ce portail : la page est hébergée par GitHub, Inc. et ses polices de caractères sont fournies par Google LLC, sociétés établies aux États-Unis ; votre adresse IP de connexion leur est transmise lors de l’affichage de la page. Les informations et pièces déposées sont reçues et stockées dans les services Google Workspace de BW Support ; certaines données peuvent être traitées par Google hors de l’Union européenne. GitHub, Inc. et Google LLC adhèrent au cadre de protection des données UE–États-Unis (« Data Privacy Framework »), objet d’une décision d’adéquation de la Commission européenne ; Google recourt également aux clauses contractuelles types.</p>
+    <h3>g) Conservation</h3>
+    <p>Les données sont conservées pendant le temps nécessaire aux opérations pour lesquelles elles ont été collectées et, pour la gestion du contrat, conformément aux délais légaux de prescription.</p>
     <h3>h) Vos droits</h3>
-    <p>Vous disposez des droits d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité, ainsi que du droit de définir des directives relatives au sort de vos données après votre décès. Ils s’exercent auprès de dpo@bwsupport.fr. Vous pouvez introduire une réclamation auprès de la CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>.</p>
-    <h3>i) Décision automatisée</h3>
-    <p>Aucune décision fondée exclusivement sur un traitement automatisé n’est prise : chaque demande est étudiée par un gestionnaire. Le portail vérifie seulement que les pièces obligatoires sont jointes avant l’envoi.</p>
+    <p>Vous disposez des droits d’accès, de rectification, d’effacement, de limitation, d’opposition et de portabilité, du droit d’obtenir une intervention humaine, ainsi que du droit de définir des directives relatives au sort de vos données après votre décès. Ils s’exercent auprès de dpo@bwsupport.fr. Vous pouvez introduire une réclamation auprès de la CNIL, 3 place de Fontenoy, TSA 80715, 75334 Paris Cedex 07 — <a href="https://www.cnil.fr" target="_blank" rel="noopener">www.cnil.fr</a>.</p>
+    <h3>i) Décision</h3>
+    <p>Le montant de la prise en charge est fixé par le plateau technique de BW Support. Si une décision automatisée devait être utilisée pour la gestion du contrat, vous pouvez demander une intervention humaine auprès du délégué à la protection des données.</p>
     <h3>j) Stockage sur votre appareil</h3>
     <p>Pour vous éviter de tout ressaisir, le portail enregistre la saisie en cours dans la mémoire de votre navigateur (« localStorage »), sur votre appareil uniquement : les champs du formulaire, associés à l’immatriculation du véhicule et à la partie remplie (garage ou client), et la date de la saisie. Les fichiers joints, le choix de la partie et la case de certification ne sont pas enregistrés. Cette saisie n’est transmise qu’au moment où vous envoyez le dossier. Elle est effacée après un envoi réussi ou avec le bouton « Effacer et recommencer », et n’est plus proposée au-delà de 30 jours. Le portail ne dépose aucun cookie et n’utilise aucun outil de mesure d’audience.</p>
   </div>
 </dialog>
 
-<!-- Livrable 4 : Réclamations et médiation -->
+<!-- A4 : Réclamations et médiation -->
 <dialog class="legal" id="reclamations-mediation" aria-labelledby="titre-reclamations">
   <div class="legal-head"><h2 id="titre-reclamations">Réclamations et médiation</h2><button type="button" class="legal-close" data-fermer>Fermer</button></div>
   <div class="legal-body">
     <p>Toute réclamation relative à la gestion d’un dossier peut être adressée à BW Support :</p>
     <ul>
       <li>par courriel à contact@bwsupport.fr, en indiquant « Réclamation » en objet ;</li>
-      <li>par courrier à BW Support – Service Réclamations, 144 rue du Faubourg des Trois Maisons, 54000 Nancy.</li>
+      <li>par courrier à BW Support – Service Relation Clientèle, 144 rue du Faubourg des Trois Maisons, 54000 Nancy.</li>
     </ul>
     <p>Si elle n’a pu être résolue immédiatement, la réclamation doit être formulée par écrit. BW Support en accuse réception dans un délai maximal de dix jours ouvrables à compter de son envoi, sauf réponse apportée dans ce délai, et y répond au plus tard dans les deux mois suivant l’envoi de la première réclamation écrite.</p>
-    <p>Passé ce délai de deux mois, que vous ayez ou non reçu une réponse, le titulaire de la garantie agissant en qualité de consommateur peut saisir gratuitement La Médiation de l’Assurance : <a href="https://www.mediation-assurance.org" target="_blank" rel="noopener">www.mediation-assurance.org</a> ou TSA 50110, 75441 Paris Cedex 09.</p>
+    <p>Passé ce délai de deux mois, que vous ayez ou non reçu une réponse, le titulaire de la garantie agissant en qualité de consommateur peut saisir gratuitement La Médiation de l’Assurance, au plus tard un an après sa réclamation écrite : <a href="https://www.mediation-assurance.org" target="_blank" rel="noopener">www.mediation-assurance.org</a> ou TSA 50110, 75441 Paris Cedex 09.</p>
   </div>
 </dialog>
 
@@ -1041,6 +1064,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       missing: "Ajoutez le diagnostic du garage.",
       exemple: ["Compte rendu daté, avec l’immatriculation ou le numéro de série (VIN)", "Codes défaut relevés à la valise et leur libellé", "Pièce en cause et origine de la panne", "Nom, tampon ou signature du garage"] },
     { key: "devis", req: true, bloquant: true, icon: "i-quote", short: "Devis", miss: "le devis",
+      rappel: "Devis contrôlé à partir des données constructeur ; main-d’œuvre retenue selon le barème du constructeur.",
       title: "Devis de réparation", desc: "Le devis détaillé des réparations, pièces et main-d’œuvre, établi par le garage.",
       missing: "Ajoutez le devis de réparation.",
       exemple: ["Détail des pièces avec leurs références et prix", "Main-d’œuvre : nombre d’heures et taux horaire", "Montants HT, TVA et TTC", "Immatriculation, kilométrage et coordonnées du garage"] },
@@ -1272,7 +1296,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     if (!d.exemple) return "";
     return `<details class="exemple"><summary>Ce qui est attendu</summary><div class="exemple-corps">
       <svg viewBox="0 0 200 130" role="img" aria-label="Exemple schématique : ${d.title}">${SVG_EXEMPLE[d.key] || ""}</svg>
-      <ul>${d.exemple.map(x => `<li>${x}</li>`).join("")}</ul></div></details>`;
+      <ul>${d.exemple.map(x => `<li>${x}</li>`).join("")}</ul></div></details>${d.rappel ? `<p class="ex-rappel">${d.rappel}</p>` : ""}`;
   }
   function docRowHTML(d) {
     return `<div class="doc-row" id="row-${d.key}">
@@ -1354,8 +1378,17 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   ["dragover", "drop"].forEach(ev => window.addEventListener(ev, e => { if (!e.target.closest || !e.target.closest(".drop")) e.preventDefault(); }));
 
   /* ---------- Rôle (garage ou client) ---------- */
+  const TEXTE_CERTIF_CLIENT = "Je certifie que les informations fournies sont exactes et que les documents joints sont authentiques.";
+  const TEXTE_CERTIF_PRO = "Je certifie que les informations fournies sont exactes et que les documents joints sont authentiques. J’ai pris connaissance des modalités d’analyse du devis et des règles de prise en charge.";
+  const MSG_PARTIE = {
+    client: "Des informations exactes et des photos nettes : c’est tout ce qu’il nous faut pour étudier votre demande sans vous relancer.",
+    garage: "Un diagnostic précis et un devis détaillé (références des pièces, temps de main-d’œuvre, taux horaire) : c’est ce qui permet une analyse rapide, sans demande de complément."
+  };
   function setRole(r) {
     role = r;
+    $("#msgPartie").textContent = MSG_PARTIE[r] || ""; $("#msgPartie").hidden = !MSG_PARTIE[r];
+    $("#noteDevis").hidden = r !== "garage";
+    $("#texteCertification").textContent = r === "garage" ? TEXTE_CERTIF_PRO : TEXTE_CERTIF_CLIENT;
     const g = $("#step-garage"), c = $("#step-client");
     if (r === "client") g.parentNode.insertBefore(c, g); else c.parentNode.insertBefore(g, c);
     g.hidden = r === "client";   /* partie client : pas d’étape « garage » */
