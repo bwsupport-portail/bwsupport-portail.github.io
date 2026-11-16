@@ -196,6 +196,7 @@ main{min-width:0}
 .field > label,.group > legend{display:block;font-weight:600;font-size:15.5px;margin-bottom:7px;padding:0}
 .opt{font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
 .field:not(.is-opt) .opt{display:none}
+.multi{font-weight:400;color:var(--muted);font-size:14px;margin-left:6px}
 .group{border:0;margin:0;padding:0;min-width:0}
 .hint{font-size:14px;color:var(--muted);margin-top:6px}
 .error{font-size:14px;color:var(--error);margin-top:6px;font-weight:500}
@@ -477,7 +478,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
       <p>Un dossier par véhicule : le garage et le client y déposent chacun leurs informations et leurs pièces justificatives pour l’étude d’une prise en charge au titre d’une garantie panne mécanique.</p>
       <div class="keep">
         <svg class="ic"><use href="#i-list"/></svg>
-        <span>À avoir sous la main : le diagnostic du garage, le devis de réparation, la carte grise et le carnet ou les factures d’entretien.</span>
+        <span>À avoir sous la main : le diagnostic, le devis, la carte grise, le suivi d’entretien et le dernier contrôle technique ; pour le client, la déclaration de cession ; pour le garage, son RIB.</span>
       </div>
     </section>
 
@@ -533,7 +534,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
             <span class="who-body">
               <span class="who-icon"><svg class="ic"><use href="#i-user"/></svg></span>
               <span class="who-name">Partie client</span>
-              <span class="who-desc">Titulaire de la garantie : carte grise, entretien, panne.</span>
+              <span class="who-desc">Titulaire de la garantie : panne, carte grise, entretien, contrôle technique, cession.</span>
               <span class="who-check"><svg class="ic"><use href="#i-check"/></svg></span>
             </span>
           </label>
@@ -680,8 +681,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
               <div class="suffix"><input type="text" id="km" name="km" inputmode="numeric" class="js-km" aria-describedby="err-km"><span>km</span></div>
               <p class="error" id="err-km"></p>
             </div>
-            <fieldset class="field group span-2 is-opt" data-field="conditions">
-              <legend>Dans quelles conditions est-elle apparue ?<span class="opt">facultatif, plusieurs choix possibles</span></legend>
+            <fieldset class="field group span-2 is-opt" data-field="conditions" aria-describedby="err-conditions">
+              <legend>Dans quelles conditions est-elle apparue ?<span class="opt">facultatif</span><span class="multi">plusieurs choix possibles</span></legend>
               <div class="chips">
                 <label class="chip"><input type="checkbox" name="conditions" value="Au démarrage"><span>Au démarrage</span></label>
                 <label class="chip"><input type="checkbox" name="conditions" value="Moteur froid"><span>Moteur froid</span></label>
@@ -691,10 +692,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
                 <label class="chip"><input type="checkbox" name="conditions" value="En accélérant"><span>En accélérant</span></label>
                 <label class="chip"><input type="checkbox" name="conditions" value="En freinant"><span>En freinant</span></label>
                 <label class="chip"><input type="checkbox" name="conditions" value="À l’arrêt"><span>À l’arrêt</span></label>
+                <label class="chip"><input type="checkbox" name="conditions" value="Je ne sais pas"><span>Je ne sais pas</span></label>
               </div>
+              <p class="error" id="err-conditions"></p>
             </fieldset>
-            <fieldset class="field group span-2 is-opt" data-field="symptomes">
-              <legend>Qu’a-t-on constaté ?<span class="opt">facultatif, plusieurs choix possibles</span></legend>
+            <fieldset class="field group span-2 is-opt" data-field="symptomes" aria-describedby="err-symptomes">
+              <legend>Qu’a-t-on constaté ?<span class="opt">facultatif</span><span class="multi">plusieurs choix possibles</span></legend>
               <div class="chips">
                 <label class="chip"><input type="checkbox" name="symptomes" value="Bruit anormal"><span>Bruit anormal</span></label>
                 <label class="chip"><input type="checkbox" name="symptomes" value="Fumée"><span>Fumée</span></label>
@@ -703,10 +706,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
                 <label class="chip"><input type="checkbox" name="symptomes" value="À-coups ou vibrations"><span>À-coups ou vibrations</span></label>
                 <label class="chip"><input type="checkbox" name="symptomes" value="Calage du moteur"><span>Calage du moteur</span></label>
                 <label class="chip"><input type="checkbox" name="symptomes" value="Surchauffe"><span>Surchauffe</span></label>
+                <label class="chip"><input type="checkbox" name="symptomes" value="Aucun de ces signes"><span>Aucun de ces signes</span></label>
               </div>
+              <p class="error" id="err-symptomes"></p>
             </fieldset>
-            <fieldset class="field group span-2 is-opt" data-field="voyants">
-              <legend>Voyants allumés au tableau de bord<span class="opt">facultatif, plusieurs choix possibles</span></legend>
+            <fieldset class="field group span-2 is-opt" data-field="voyants" aria-describedby="err-voyants">
+              <legend>Voyants allumés au tableau de bord<span class="opt">facultatif</span><span class="multi">plusieurs choix possibles</span></legend>
               <div class="chips">
                 <label class="chip"><input type="checkbox" name="voyants" value="Moteur"><span>Moteur</span></label>
                 <label class="chip"><input type="checkbox" name="voyants" value="Huile"><span>Huile</span></label>
@@ -717,6 +722,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
                 <label class="chip"><input type="checkbox" name="voyants" value="Autre voyant"><span>Autre</span></label>
                 <label class="chip"><input type="checkbox" name="voyants" value="Aucun voyant"><span>Aucun</span></label>
               </div>
+              <p class="error" id="err-voyants"></p>
             </fieldset>
             <fieldset class="field group span-2" data-field="roulage_apres" aria-describedby="err-roulage_apres">
               <legend>Le véhicule a-t-il roulé après les premiers symptômes ?<span class="opt">facultatif</span></legend>
@@ -728,19 +734,21 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
               </div>
               <p class="error" id="err-roulage_apres"></p>
             </fieldset>
-            <fieldset class="field group" data-field="vehicule_roulant">
+            <fieldset class="field group" data-field="vehicule_roulant" aria-describedby="err-vehicule_roulant">
               <legend>Le véhicule roule-t-il encore ?<span class="opt">facultatif</span></legend>
               <div class="chips">
                 <label class="chip"><input type="radio" name="vehicule_roulant" value="Oui"><span>Oui</span></label>
                 <label class="chip"><input type="radio" name="vehicule_roulant" value="Non, il est immobilisé"><span>Non, il est immobilisé</span></label>
               </div>
+              <p class="error" id="err-vehicule_roulant"></p>
             </fieldset>
-            <fieldset class="field group" data-field="remorque">
+            <fieldset class="field group" data-field="remorque" aria-describedby="err-remorque">
               <legend>A-t-il été remorqué jusqu’au garage ?<span class="opt">facultatif</span></legend>
               <div class="chips">
                 <label class="chip"><input type="radio" name="remorque" value="Oui"><span>Oui</span></label>
                 <label class="chip"><input type="radio" name="remorque" value="Non"><span>Non</span></label>
               </div>
+              <p class="error" id="err-remorque"></p>
             </fieldset>
             <div class="field span-2" data-field="description">
               <label for="description">Décrivez la panne en quelques lignes<span class="opt">facultatif</span></label>
@@ -869,18 +877,19 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   const form = $("#claimForm");
 
   /* ---------- Données de référence ---------- */
+  const PANNE_REQ = ["date_panne", "km", "conditions", "symptomes", "voyants", "roulage_apres", "vehicule_roulant", "remorque", "description"];
   const SECTIONS = [
-    { key: "garage", step: "step-garage", icon: "i-garage",
+    { key: "garage", step: "step-garage", icon: "i-garage", only: "garage",
       name: { garage: "Votre garage", client: "Garage" }, miss: { garage: "votre garage", client: "le garage" },
-      req: { garage: ["garage_nom", "garage_ville", "garage_contact", "garage_tel", "garage_email", "travaux"],
+      req: { garage: ["garage_nom", "garage_ville", "siret", "naf", "garage_contact", "garage_tel", "garage_email", "date_depot", "travaux"],
              client: ["garage_nom", "garage_ville", "travaux"] } },
     { key: "client", step: "step-client", icon: "i-user",
       name: { garage: "Client", client: "Coordonnées" }, miss: { garage: "le client", client: "vos coordonnées" },
-      req: { garage: ["nom", "prenom"], client: ["nom", "prenom", "email", "telephone"] } },
+      req: { garage: ["nom", "prenom", "email"], client: ["nom", "prenom", "email", "telephone"] } },
     { key: "vehicule", step: "step-vehicule", icon: "i-car", name: "Véhicule", miss: "le véhicule",
       req: { garage: ["immat", "marque", "modele"], client: ["immat", "marque", "modele"] } },
     { key: "panne", step: "step-panne", icon: "i-engine", name: "Panne", miss: "la panne",
-      req: { garage: ["date_panne", "km", "roulage_apres", "description"], client: ["date_panne", "km", "roulage_apres", "description"] } }
+      req: { garage: PANNE_REQ, client: PANNE_REQ } }
   ];
 
   const DOCS = [
@@ -900,17 +909,32 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       title: "Suivi d’entretien", desc: "Le carnet d’entretien tamponné ou les factures des révisions réalisées.",
       missing: "Ajoutez le carnet ou les factures d’entretien.",
       exemple: ["Toutes les révisions depuis l’achat du véhicule", "Pour chaque révision : date et kilométrage lisibles", "Factures détaillées (vidange, filtres…) ou pages tamponnées du carnet", "Plusieurs photos ou un PDF regroupé, au choix"] },
-    { key: "rib", req: false, garage: true, icon: "i-card",
-      title: "RIB du garage", desc: "Le relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail." },
-    { key: "achat", req: false, icon: "i-file",
-      title: "Facture d’achat du véhicule", desc: "La facture ou le bon de commande, avec la date et le kilométrage de livraison." },
+    { key: "controle_technique", reqRoles: ["client"], icon: "i-check", short: "Contrôle technique", miss: "le dernier contrôle technique",
+      title: "Dernier contrôle technique", desc: "Le procès-verbal du dernier contrôle technique réalisé sur le véhicule.",
+      missing: "Ajoutez le procès-verbal du dernier contrôle technique.",
+      exemple: ["Le procès-verbal complet, toutes les pages", "Date du contrôle et kilométrage lisibles", "Résultat : favorable, contre-visite ou défavorable", "Véhicule de moins de 4 ans, sans contrôle encore : joignez la carte grise à la place"] },
+    { key: "cession", reqRoles: ["client"], only: "client", icon: "i-quote", short: "Cession", miss: "la déclaration de cession",
+      title: "Déclaration de cession", desc: "Le certificat de cession (Cerfa n° 15776) remis lors de l’achat du véhicule.",
+      missing: "Ajoutez la déclaration de cession du véhicule.",
+      exemple: ["Cerfa n° 15776 complet, signé par le vendeur et par l’acheteur", "Date et heure de la vente lisibles", "Kilométrage au jour de la vente", "Vendeur professionnel : son tampon ou sa raison sociale"] },
+    { key: "rib", only: "garage", icon: "i-card",
+      title: "RIB du garage", desc: "Si possible, une photo du relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail." },
     { key: "compteur", req: false, icon: "i-gauge",
       title: "Photo du compteur", desc: "Le tableau de bord, contact mis, avec le kilométrage lisible." },
     { key: "photos", req: false, icon: "i-camera",
       title: "Photos de la panne", desc: "Voyants allumés, pièce endommagée, fuite, compartiment moteur." },
     { key: "autres", req: false, icon: "i-file",
-      title: "Autres documents", desc: "Contrôle technique, factures de réparations antérieures, rapport d’expertise." }
+      title: "Autres documents", desc: "Factures de réparations antérieures, rapport d’expertise, tout document utile." }
   ];
+  /* Pièce visible et obligatoire selon la partie remplie (garage ou client). */
+  const partie = () => role || "garage";
+  const visible = d => !d.only || d.only === partie();
+  const sections = () => SECTIONS.filter(s => !s.only || s.only === partie());
+  DOCS.forEach(d => {
+    if (!d.reqRoles) d.reqRoles = d.req ? ["garage", "client"] : [];
+    delete d.req;
+    Object.defineProperty(d, "req", { get() { return visible(d) && d.reqRoles.includes(partie()); } });
+  });
 
   const MSG = {
     qui: "Indiquez qui remplit ce dossier.",
@@ -924,8 +948,10 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     energie: "Choisissez l’énergie du véhicule.", mise_circulation: "Indiquez une date qui n’est pas dans le futur.",
     date_achat: "Indiquez la date d’achat (elle ne peut pas être dans le futur).", km_achat: "Indiquez un kilométrage en chiffres.",
     date_panne: "Indiquez la date de la panne (elle ne peut pas être dans le futur).", km: "Indiquez le kilométrage au moment de la panne.",
-    roulage_apres: "Choisissez une réponse.", description: "Décrivez la panne en 20 caractères minimum.",
-    date_depot: "Indiquez une date qui n’est pas dans le futur.", montant_devis: "Indiquez un montant en euros.",
+    roulage_apres: "Choisissez une réponse.", vehicule_roulant: "Choisissez une réponse.", remorque: "Choisissez une réponse.",
+    conditions: "Choisissez au moins une réponse.", symptomes: "Choisissez au moins une réponse.", voyants: "Choisissez au moins une réponse.",
+    description: "Décrivez la panne en 20 caractères minimum.",
+    date_depot: "Indiquez la date d’entrée du véhicule à l’atelier (elle ne peut pas être dans le futur).", montant_devis: "Indiquez un montant en euros.",
     certification: "Cochez la case pour confirmer l’exactitude des informations."
   };
 
@@ -969,7 +995,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     siret: isSiret, naf: v => /^\d{2}\.?\d{2}[A-Z]$/i.test(v.trim()),
     immat: isImmat, marque: min2, modele: filled,
     date_panne: isDate, km: v => (toInt(v) || 0) > 0, roulage_apres: filled, description: v => v.trim().length >= 20,
-    vehicule_roulant: () => true, remorque: () => true
+    vehicule_roulant: filled, remorque: filled, conditions: filled, symptomes: filled, voyants: filled
   };
 
   const val = name => {
@@ -1037,7 +1063,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
 
   /* ---------- Voyants ---------- */
   function orderedSections() {
-    return SECTIONS.slice().sort((a, b) => {
+    return sections().sort((a, b) => {
       const ea = document.getElementById(a.step), eb = document.getElementById(b.step);
       return ea.compareDocumentPosition(eb) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
     });
@@ -1116,9 +1142,20 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       </div>
     </div>`;
   }
-  $("#docsRequired").innerHTML = DOCS.filter(d => d.req).map(docRowHTML).join("");
-  $("#docsOptional").innerHTML = DOCS.filter(d => !d.req && !d.garage).map(docRowHTML).join("");
-  $("#docsGarage").innerHTML = DOCS.filter(d => d.garage).map(docRowHTML).join("");
+  $("#docsOptional").innerHTML = DOCS.map(docRowHTML).join("");
+  /* Range chaque pièce selon la partie remplie : obligatoire, facultative ou propre au garage. */
+  function placerPieces() {
+    DOCS.forEach(d => {
+      const row = $(`#row-${d.key}`); if (!row) return;
+      const vis = visible(d);
+      if (!vis && files[d.key].length) files[d.key] = [];
+      row.hidden = !vis;
+      if (!vis) { row.classList.remove("invalid"); const e = $(`#err-${d.key}`); if (e) e.textContent = ""; }
+      (d.only === "garage" ? $("#docsGarage") : d.req ? $("#docsRequired") : $("#docsOptional")).appendChild(row);
+      renderFiles(d.key);
+    });
+  }
+  placerPieces();
 
   function addFiles(key, list) {
     const errs = [];
@@ -1169,9 +1206,10 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     role = r;
     const g = $("#step-garage"), c = $("#step-client");
     if (r === "client") g.parentNode.insertBefore(c, g); else c.parentNode.insertBefore(g, c);
-    $$(".step").forEach((s, i) => { const n = s.querySelector(".step-num"); if (n) n.textContent = i + 1; });
+    g.hidden = r === "client";   /* partie client : pas d’étape « garage » */
+    $$(".step").filter(s => !s.hidden).forEach((s, i) => { const n = s.querySelector(".step-num"); if (n) n.textContent = i + 1; });
     $$("[data-garage][data-client]").forEach(el => { el.textContent = el.dataset[r]; });
-    reqSet = new Set(SECTIONS.flatMap(s => s.req[r]));
+    reqSet = new Set(sections().flatMap(s => s.req[r]));
     $$(".field[data-field]").forEach(f => {
       const n = f.dataset.field;
       if (n === "certification") return;
@@ -1181,7 +1219,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     });
     $("#who").classList.remove("invalid"); $("#err-qui").textContent = "";
     $("#ribBloc").hidden = r !== "garage";
-    if (r !== "garage" && files.rib.length) { files.rib = []; renderFiles("rib"); }
+    placerPieces();
     $("#formBody").hidden = !plaqueDossier;
     if (plaqueDossier) reprendreBrouillon();
     buildLights();
@@ -1282,14 +1320,14 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   /* ---------- Avancement ---------- */
   function computeState() {
     const st = {}; let total = 0;
-    SECTIONS.forEach(s => {
+    sections().forEach(s => {
       const req = s.req[roleOf()];
       const okCount = req.filter(n => val(n).trim() && isValid(n)).length;
       st[s.key] = role ? okCount === req.length : false;
       total += role ? okCount / req.length : 0;
     });
     DOCS.filter(d => d.req).forEach(d => { st[d.key] = files[d.key].length > 0 || recuesDossier.has(d.key); if (st[d.key]) total += 1; });
-    const units = SECTIONS.length + DOCS.filter(d => d.req).length;
+    const units = sections().length + DOCS.filter(d => d.req).length;
     return { st, p: total / units };
   }
   function update() {
@@ -1343,7 +1381,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     line("Entrée à l’atelier", fmtDate(val("date_depot"))); line("Montant du devis TTC", fmtEur(val("montant_devis")));
     line("Travaux déjà réalisés", val("travaux"));
     L.push("", "5. PIÈCES JOINTES À CET ENVOI");
-    DOCS.filter(d => !d.garage || role === "garage").forEach(d => L.push(`${d.title} : ${files[d.key].length ? files[d.key].map(f => f.name).join(", ") : "non joint à cet envoi"}`));
+    DOCS.filter(visible).forEach(d => L.push(`${d.title} : ${files[d.key].length ? files[d.key].map(f => f.name).join(", ") : "non joint à cet envoi"}`));
     const R = reperes();
     if (R.length) { L.push("", "6. REPÈRES CALCULÉS (à partir des déclarations, à confirmer sur pièces)"); R.forEach(r => L.push(`- ${r}`)); }
     return L.join("\n");
@@ -1474,8 +1512,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     $("#intro").hidden = true; form.hidden = true; $("#success").hidden = false;
     const recu = d => manquantesDossier ? !manquantesDossier.includes(d.title) : files[d.key].length > 0;
     const obligatoires = DOCS.filter(d => d.req);
-    lastState = Object.fromEntries([...SECTIONS.map(s => [s.key, true]), ...obligatoires.map(d => [d.key, recu(d)])]);
-    setGauge((SECTIONS.length + obligatoires.filter(recu).length) / (SECTIONS.length + obligatoires.length));
+    lastState = Object.fromEntries([...sections().map(s => [s.key, true]), ...obligatoires.map(d => [d.key, recu(d)])]);
+    setGauge((sections().length + obligatoires.filter(recu).length) / (sections().length + obligatoires.length));
     setLights(lastState);
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
     $("#success").focus({ preventScroll: true });
