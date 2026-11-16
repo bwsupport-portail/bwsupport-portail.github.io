@@ -15,6 +15,7 @@
   --paper:#F2F4F8; --surface:#FFFFFF; --surface-2:#F5F7FA; --field:#FFFFFF;
   --ink:#13294B; --ink-2:#2E4468; --muted:#5C6B82; --heading:#13294B; --placeholder:#8D99AC;
   --line:#D8DFE9; --line-strong:#B5C1D2;
+  --verrou-bg:#D3D9E1; --verrou-line:#AEB7C4; --verrou-ink:#69737F; --verrou-icon:#C2CAD5;
   --solid:#13294B; --solid-hover:#1E3B66; --on-solid:#FFFFFF;
   --cluster:#13294B; --cluster-2:#1E3B66; --cluster-ink:#DDE6F2; --cluster-muted:#8FA3BF;
   --marine:#13294B;
@@ -39,6 +40,7 @@
     --paper:#0B1626; --surface:#122138; --surface-2:#172A45; --field:#0E1B2E;
     --ink:#E4EBF1; --ink-2:#C3CFDA; --muted:#93A3B2; --heading:#F1F5F8; --placeholder:#6E7F8F;
     --line:#22344F; --line-strong:#344B6B;
+    --verrou-bg:#1C2633; --verrou-line:#2C3747; --verrou-ink:#6F7B8A; --verrou-icon:#253142;
     --solid:#DCE6EF; --solid-hover:#F2F6F9; --on-solid:#13202B;
     --cluster:#13294B; --cluster-2:#1E3B66;
     --amber-ink:#9CC0EE;
@@ -56,6 +58,7 @@
   --paper:#0B1626; --surface:#122138; --surface-2:#172A45; --field:#0E1B2E;
   --ink:#E4EBF1; --ink-2:#C3CFDA; --muted:#93A3B2; --heading:#F1F5F8; --placeholder:#6E7F8F;
   --line:#22344F; --line-strong:#344B6B;
+  --verrou-bg:#1C2633; --verrou-line:#2C3747; --verrou-ink:#6F7B8A; --verrou-icon:#253142;
   --solid:#DCE6EF; --solid-hover:#F2F6F9; --on-solid:#13202B;
   --cluster:#13294B; --cluster-2:#1E3B66;
   --amber-ink:#9CC0EE;
@@ -161,7 +164,7 @@ main{min-width:0}
 .who-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .who-card{position:relative;display:block;cursor:pointer}
 .who-card input{position:absolute;opacity:0;width:1px;height:1px}
-.who-body{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;height:100%;padding:18px 44px 18px 18px;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:14px;transition:border-color .15s,background .15s,box-shadow .15s,opacity .3s ease,filter .3s ease}
+.who-body{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;height:100%;padding:18px 44px 18px 18px;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:14px;transition:border-color .3s ease,background .3s ease,box-shadow .15s}
 .who-card:hover .who-body{border-color:var(--ink)}
 .who-icon{grid-row:1 / span 2;width:46px;height:46px;border-radius:12px;background:var(--paper);color:var(--heading);display:grid;place-items:center}
 .who-name{font-family:var(--font-display);font-weight:700;font-size:17px;line-height:1.15}
@@ -175,10 +178,14 @@ main{min-width:0}
 .who-card input:focus-visible + .who-body{outline:3px solid var(--focus);outline-offset:3px}
 .who.invalid .who-body{border-color:var(--error)}
 /* Page d’entrée : parties grisées tant qu’aucune plaque valide n’est saisie */
-.who-note{font-size:14.5px;color:var(--muted);margin:-4px 0 12px}
+.who-note{display:flex;align-items:center;gap:8px;font-size:14.5px;color:var(--muted);margin:-4px 0 12px}
+.who-note .spinner{width:16px;height:16px;flex:none;border-top-color:var(--ink)}
+.who-name,.who-desc,.who-icon{transition:color .3s ease,background .3s ease}
 .who.verrou .who-card{cursor:not-allowed}
-.who.verrou .who-body{opacity:.45;filter:grayscale(1)}
-.who.verrou .who-card:hover .who-body{border-color:var(--line-strong)}
+.who.verrou .who-card input + .who-body{background:var(--verrou-bg);border-color:var(--verrou-line);box-shadow:none}
+.who.verrou .who-card input + .who-body .who-icon{background:var(--verrou-icon);color:var(--verrou-ink)}
+.who.verrou .who-name,.who.verrou .who-desc{color:var(--verrou-ink)}
+.who.verrou .who-card input + .who-body .who-check{background:var(--verrou-bg);border-color:var(--verrou-line);color:var(--verrou-ink)}
 
 /* Accès au dossier par immatriculation */
 .acces,.dossier{margin-bottom:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel)}
@@ -531,10 +538,9 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
 
     <section class="acces" id="acces" aria-labelledby="accesTitre">
       <h2 id="accesTitre">Accéder au dossier</h2>
-      <p class="acces-intro">Saisissez la plaque d’immatriculation du véhicule.</p>
+      <p class="acces-intro">Saisissez la plaque d’immatriculation du véhicule, puis choisissez votre partie : le dossier s’ouvre automatiquement.</p>
       <form id="accesForm" class="acces-ligne" novalidate>
         <div class="plate"><span class="plate-band" aria-hidden="true">F</span><input type="text" id="accesImmat" placeholder="AB-123-CD" maxlength="12" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Immatriculation du véhicule" aria-describedby="err-acces"></div>
-        <button type="submit" class="btn" id="accesBtn">Ouvrir le dossier</button>
       </form>
       <p class="error" id="err-acces" aria-live="polite"></p>
       <p class="acces-demo" id="accesDemo" hidden>Démonstration : saisissez AB-123-CD pour voir un dossier déjà ouvert par le client.</p>
@@ -566,7 +572,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
 
       <section class="who verrou" id="who" aria-labelledby="whoTitle">
         <h2 id="whoTitle">Quelle partie remplissez-vous ?</h2>
-        <p class="who-note" id="whoVerrou">Saisissez la plaque d’immatriculation ci-dessus pour activer votre choix.</p>
+        <p class="who-note" id="whoVerrou" aria-live="polite">Saisissez la plaque d’immatriculation ci-dessus pour activer votre choix.</p>
         <p class="msg-partie" id="msgPartie" aria-live="polite" hidden></p>
         <div class="who-cards" role="radiogroup" aria-labelledby="whoTitle" aria-describedby="err-qui">
           <label class="who-card">
@@ -1785,20 +1791,28 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     });
   }
   const accesInput = $("#accesImmat");
+  let ouvertureEnCours = false;
   function majVerrouParties() {
-    const actif = $("#acces").hidden || isImmat(formaterPlaque(accesInput.value).trim());
+    const entree = !$("#acces").hidden;
+    const plaqueOk = isImmat(formaterPlaque(accesInput.value).trim());
+    const actif = !entree || plaqueOk;
     $("#who").classList.toggle("verrou", !actif);
-    $$('input[name="qui"]').forEach(r => { r.disabled = !actif; });
-    $("#whoVerrou").hidden = actif;
+    $$('input[name="qui"]').forEach(r => { r.disabled = !actif || ouvertureEnCours; });
+    const note = $("#whoVerrou");
+    note.hidden = !entree;
+    if (!entree) return;
+    if (ouvertureEnCours) note.innerHTML = '<span class="spinner" aria-hidden="true"></span>Ouverture du dossier…';
+    else note.textContent = plaqueOk ? "Choisissez votre partie : le dossier s’ouvre automatiquement." : "Saisissez la plaque d’immatriculation ci-dessus pour activer votre choix.";
   }
   accesInput.addEventListener("input", () => { accesInput.value = formaterPlaque(accesInput.value); $("#err-acces").textContent = ""; majVerrouParties(); });
   $("#accesForm").addEventListener("submit", async e => {
     e.preventDefault();
-    if ($("#accesBtn").disabled) return;
+    if (ouvertureEnCours) return;
     const plaque = formaterPlaque(accesInput.value).trim();
     if (!isImmat(plaque)) { $("#err-acces").textContent = MSG.immat; accesInput.focus(); return; }
-    const b = $("#accesBtn");
-    b.disabled = true; b.innerHTML = `<span class="spinner" aria-hidden="true"></span>Ouverture…`;
+    if (!role) { majVerrouParties(); $("#who").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" }); return; }
+    ouvertureEnCours = true; majVerrouParties();
+    let echec = false;
     try {
       const d = await chargerDossier(plaque);
       if (plaqueDossier && plaque !== plaqueDossier) { viderChamps(); brouillonRepris = ""; }
@@ -1812,9 +1826,11 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       update();
       $("#dossier").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
     } catch (err) {
+      echec = true;
       $("#err-acces").textContent = "Le dossier n’a pas pu être ouvert. Vérifiez votre connexion puis réessayez.";
     } finally {
-      b.disabled = false; b.textContent = "Ouvrir le dossier";
+      ouvertureEnCours = false; majVerrouParties();
+      if (echec) $("#whoVerrou").textContent = "Le dossier n’a pas pu être ouvert. Vérifiez votre connexion, puis choisissez de nouveau votre partie.";
     }
   });
   $("#changerVehicule").addEventListener("click", () => {
@@ -1951,7 +1967,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   update();
   const immatLien = formaterPlaque(IMMAT_INITIALE || new URLSearchParams(location.search).get("immat") || "").trim();
   majVerrouParties();
-  if (immatLien && isImmat(immatLien)) { accesInput.value = immatLien; majVerrouParties(); $("#accesForm").requestSubmit(); }
+  if (immatLien && isImmat(immatLien)) { accesInput.value = immatLien; majVerrouParties(); if (role) $("#accesForm").requestSubmit(); }
   else proposerReprise();
 
   // Mise du contact : tous les voyants s'allument et l'aiguille balaie le cadran, comme au démarrage d'un véhicule.
