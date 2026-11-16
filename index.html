@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Be Weal, géré par BW Support : ouverture de prise en charge au titre d’une garantie panne mécanique.">
 <meta name="robots" content="noindex">
-<title>Be Weal – Ouverture de prise en charge</title>
+<title>BeWeal – Ouverture de prise en charge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -426,7 +426,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
 <div class="demo-strip" id="demoStrip" hidden>Version de présentation : le formulaire n’est pas encore relié au service de gestion, aucun document n’est transmis.</div>
 
 <header class="topbar">
-  <div class="brand-bloc"><span class="brand">Be Weal</span><span class="brand-gere">Géré par <b>BW Support</b></span></div>
+  <div class="brand-bloc"><span class="brand">BeWeal</span><span class="brand-gere">Géré par <b>BW Support</b></span></div>
   <span class="topbar-note">Garantie panne mécanique</span>
 </header>
 
@@ -563,6 +563,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
               <input type="text" id="garage_ville" name="garage_ville" aria-describedby="err-garage_ville">
               <p class="error" id="err-garage_ville"></p>
             </div>
+            <div class="field" data-field="siret">
+              <label for="siret">SIRET du garage<span class="opt">facultatif</span></label>
+              <input type="text" id="siret" name="siret" inputmode="numeric" maxlength="17" placeholder="123 456 789 00012" autocomplete="off" aria-describedby="hint-siret err-siret">
+              <p class="hint" id="hint-siret">14 chiffres, sur l’extrait Kbis ou les factures du garage.</p>
+              <p class="error" id="err-siret"></p>
+            </div>
+            <div class="field" data-field="naf">
+              <label for="naf">Code NAF (APE)<span class="opt">facultatif</span></label>
+              <input type="text" id="naf" name="naf" maxlength="6" placeholder="45.20A" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-describedby="hint-naf err-naf">
+              <p class="hint" id="hint-naf">Par exemple 45.20A pour l’entretien et la réparation automobile.</p>
+              <p class="error" id="err-naf"></p>
+            </div>
             <div class="field" data-field="garage_contact">
               <label for="garage_contact"><span data-garage="Votre nom" data-client="Interlocuteur au garage">Votre nom</span><span class="opt">facultatif</span></label>
               <input type="text" id="garage_contact" name="garage_contact" aria-describedby="err-garage_contact">
@@ -598,6 +610,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
               </div>
               <p class="error" id="err-travaux"></p>
             </fieldset>
+            <div class="span-2 rib-bloc" id="ribBloc" hidden><div id="docsGarage"></div></div>
           </div>
         </fieldset>
 
@@ -649,49 +662,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
               <input type="text" id="modele" name="modele" placeholder="308" aria-describedby="err-modele">
               <p class="error" id="err-modele"></p>
             </div>
-            <div class="field" data-field="version">
-              <label for="version">Motorisation ou version<span class="opt">facultatif</span></label>
-              <input type="text" id="version" name="version" placeholder="1.6 THP 156 ch" aria-describedby="err-version">
-              <p class="error" id="err-version"></p>
-            </div>
-            <div class="field" data-field="energie">
-              <label for="energie">Énergie<span class="opt">facultatif</span></label>
-              <select id="energie" name="energie" aria-describedby="err-energie">
-                <option value="">Choisir</option>
-                <option>Essence</option>
-                <option>Diesel</option>
-                <option>Hybride</option>
-                <option>Hybride rechargeable</option>
-                <option>Électrique</option>
-                <option>GPL</option>
-                <option>Autre</option>
-              </select>
-              <p class="error" id="err-energie"></p>
-            </div>
-            <div class="field" data-field="mise_circulation">
-              <label for="mise_circulation">Première mise en circulation<span class="opt">facultatif</span></label>
-              <input type="date" id="mise_circulation" name="mise_circulation" aria-describedby="hint-mise_circulation err-mise_circulation">
-              <p class="hint" id="hint-mise_circulation">Case B de la carte grise.</p>
-              <p class="error" id="err-mise_circulation"></p>
-            </div>
-            <div class="field" data-field="date_achat">
-              <label for="date_achat">Date d’achat du véhicule<span class="opt">facultatif</span></label>
-              <input type="date" id="date_achat" name="date_achat" aria-describedby="err-date_achat">
-              <p class="error" id="err-date_achat"></p>
-            </div>
-            <div class="field" data-field="km_achat">
-              <label for="km_achat">Kilométrage à l’achat<span class="opt">facultatif</span></label>
-              <div class="suffix"><input type="text" id="km_achat" name="km_achat" inputmode="numeric" class="js-km" aria-describedby="err-km_achat"><span>km</span></div>
-              <p class="error" id="err-km_achat"></p>
-            </div>
-            <fieldset class="field group" data-field="vendeur" aria-describedby="err-vendeur">
-              <legend>Acheté auprès<span class="opt">facultatif</span></legend>
-              <div class="chips">
-                <label class="chip"><input type="radio" name="vendeur" value="D’un professionnel"><span>D’un professionnel</span></label>
-                <label class="chip"><input type="radio" name="vendeur" value="D’un particulier"><span>D’un particulier</span></label>
-              </div>
-              <p class="error" id="err-vendeur"></p>
-            </fieldset>
           </div>
         </fieldset>
 
@@ -791,7 +761,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
         <!-- Pièces -->
         <fieldset class="step" id="step-pieces">
           <legend class="step-legend"><span class="step-num">5</span>Les pièces justificatives</legend>
-          <p class="step-intro">Une photo nette et lisible prise au téléphone suffit. Formats acceptés : PDF, JPG, PNG ou HEIC, 10 Mo maximum par fichier.</p>
+          <p class="step-intro">Une photo nette et lisible prise au téléphone suffit. Formats acceptés : PDF, JPG, PNG ou HEIC. Les photos sont allégées automatiquement ; un PDF ne doit pas dépasser 10 Mo.</p>
           <div class="docs-block">
             <h3 class="docs-title">Documents obligatoires</h3>
             <p class="docs-sub">Envoyez ceux que vous avez. Les autres peuvent être ajoutés plus tard par le garage ou par le client, avec ce même lien et la même immatriculation.</p>
@@ -842,12 +812,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--focus);b
   <div class="foot-in">
     <div class="foot-cols">
       <div>
-        <p class="foot-t">Be Weal · géré par BW Support</p>
+        <p class="foot-t">BeWeal · géré par BW Support</p>
         <p>BW Support SAS<br>144 rue du Faubourg des Trois Maisons<br>54000 Nancy<br>contact@bwsupport.fr</p>
       </div>
       <div>
         <p class="foot-t">Réclamations</p>
-        <p>Par écrit à contact@bwsupport.fr. Accusé de réception sous 10 jours, réponse sous 2 mois au plus.</p>
+        <p>Par écrit à dpo@bwsupport.fr. Accusé de réception sous 10 jours, réponse sous 2 mois au plus.</p>
       </div>
       <div>
         <p class="foot-t">Données personnelles</p>
@@ -908,7 +878,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       name: { garage: "Client", client: "Coordonnées" }, miss: { garage: "le client", client: "vos coordonnées" },
       req: { garage: ["nom", "prenom"], client: ["nom", "prenom", "email", "telephone"] } },
     { key: "vehicule", step: "step-vehicule", icon: "i-car", name: "Véhicule", miss: "le véhicule",
-      req: { garage: ["immat", "marque", "modele", "energie"], client: ["immat", "marque", "modele", "energie", "date_achat"] } },
+      req: { garage: ["immat", "marque", "modele"], client: ["immat", "marque", "modele"] } },
     { key: "panne", step: "step-panne", icon: "i-engine", name: "Panne", miss: "la panne",
       req: { garage: ["date_panne", "km", "roulage_apres", "description"], client: ["date_panne", "km", "roulage_apres", "description"] } }
   ];
@@ -930,6 +900,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       title: "Suivi d’entretien", desc: "Le carnet d’entretien tamponné ou les factures des révisions réalisées.",
       missing: "Ajoutez le carnet ou les factures d’entretien.",
       exemple: ["Toutes les révisions depuis l’achat du véhicule", "Pour chaque révision : date et kilométrage lisibles", "Factures détaillées (vidange, filtres…) ou pages tamponnées du carnet", "Plusieurs photos ou un PDF regroupé, au choix"] },
+    { key: "rib", req: false, garage: true, icon: "i-card",
+      title: "RIB du garage", desc: "Le relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail." },
     { key: "achat", req: false, icon: "i-file",
       title: "Facture d’achat du véhicule", desc: "La facture ou le bon de commande, avec la date et le kilométrage de livraison." },
     { key: "compteur", req: false, icon: "i-gauge",
@@ -947,6 +919,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     garage_email: "Indiquez une adresse email valide, par exemple atelier@garage.fr.", travaux: "Choisissez une réponse.",
     nom: "Indiquez le nom.", prenom: "Indiquez le prénom.",
     email: "Indiquez une adresse email valide, par exemple nom@exemple.fr.", telephone: "Indiquez un numéro de téléphone à 10 chiffres.",
+    siret: "Indiquez un SIRET valide de 14 chiffres.", naf: "Indiquez un code NAF au format 45.20A.",
     immat: "Indiquez l’immatriculation au format AB-123-CD.", marque: "Indiquez la marque.", modele: "Indiquez le modèle.",
     energie: "Choisissez l’énergie du véhicule.", mise_circulation: "Indiquez une date qui n’est pas dans le futur.",
     date_achat: "Indiquez la date d’achat (elle ne peut pas être dans le futur).", km_achat: "Indiquez un kilométrage en chiffres.",
@@ -979,6 +952,13 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   const isEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
   const isTel = v => { const d = v.replace(/\D/g, ""); return d.length >= 10 && d.length <= 15; };
   const isImmat = v => /^[A-Z]{2}-\d{3}-[A-Z]{2}$/.test(v) || /^\d{1,4} ?[A-Z]{1,3} ?(\d{2,3}|2A|2B)$/.test(v);
+  const isSiret = v => {
+    const d = v.replace(/\s/g, "");
+    if (!/^\d{14}$/.test(d)) return false;
+    let s = 0;
+    for (let i = 0; i < 14; i++) { let n = +d[13 - i]; if (i % 2) { n *= 2; if (n > 9) n -= 9; } s += n; }
+    return s % 10 === 0 || d.startsWith("356000000");
+  };
   const min2 = v => v.trim().length >= 2;
   const filled = v => v.trim().length > 0;
 
@@ -986,8 +966,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     garage_nom: min2, garage_ville: min2, garage_contact: min2, garage_tel: isTel, garage_email: isEmail, travaux: filled,
     date_depot: isDate, montant_devis: v => { const n = toNum(v); return n !== null && n > 0; },
     nom: min2, prenom: min2, email: isEmail, telephone: isTel,
-    immat: isImmat, marque: min2, modele: filled, version: () => true, energie: filled,
-    mise_circulation: isDate, date_achat: isDate, km_achat: v => toInt(v) !== null, vendeur: () => true,
+    siret: isSiret, naf: v => /^\d{2}\.?\d{2}[A-Z]$/i.test(v.trim()),
+    immat: isImmat, marque: min2, modele: filled,
     date_panne: isDate, km: v => (toInt(v) || 0) > 0, roulage_apres: filled, description: v => v.trim().length >= 80,
     vehicule_roulant: () => true, remorque: () => true
   };
@@ -1008,6 +988,9 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   DOCS.forEach(d => { files[d.key] = []; });
   let igniting = false;
   let plaqueDossier = "";
+  let champsDossier = {};
+  const CHAMPS_PARTAGES = ["garage_nom", "garage_ville", "siret", "naf", "garage_contact", "garage_tel", "garage_email", "date_depot", "montant_devis", "travaux",
+    "marque", "modele", "date_panne", "km", "conditions", "symptomes", "voyants", "roulage_apres", "vehicule_roulant", "remorque", "description"];
   let recuesDossier = new Set();
   let lastState = {};
   const roleOf = () => role || "garage";
@@ -1134,7 +1117,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     </div>`;
   }
   $("#docsRequired").innerHTML = DOCS.filter(d => d.req).map(docRowHTML).join("");
-  $("#docsOptional").innerHTML = DOCS.filter(d => !d.req).map(docRowHTML).join("");
+  $("#docsOptional").innerHTML = DOCS.filter(d => !d.req && !d.garage).map(docRowHTML).join("");
+  $("#docsGarage").innerHTML = DOCS.filter(d => d.garage).map(docRowHTML).join("");
 
   function addFiles(key, list) {
     const errs = [];
@@ -1196,6 +1180,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       if (optional && !val(n)) clearError(n);
     });
     $("#who").classList.remove("invalid"); $("#err-qui").textContent = "";
+    $("#ribBloc").hidden = r !== "garage";
+    if (r !== "garage" && files.rib.length) { files.rib = []; renderFiles("rib"); }
     $("#formBody").hidden = !plaqueDossier;
     if (plaqueDossier) reprendreBrouillon();
     buildLights();
@@ -1239,6 +1225,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       t.value = t.value.replace(/[^\d,.\s]/g, "").replace(".", ",");
     }
     if (n === "immat") formatImmat(t);
+    if (n === "naf") t.value = t.value.toUpperCase().replace(/[^0-9A-Z.]/g, "");
+    if (n === "siret") { const d = t.value.replace(/\D/g, "").slice(0, 14); t.value = d.replace(/^(\d{3})(\d{0,3})(\d{0,3})(\d{0,5}).*/, (m, a, b, c, e) => [a, b, c, e].filter(Boolean).join(" ")); }
     if (n === "description") updateCounter();
     if (touched.has(n) || form.querySelector(`.field[data-field="${n}"].invalid`)) validateField(n, true);
     update();
@@ -1322,11 +1310,6 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   /* ---------- Fiche de synthèse ---------- */
   function reperes() {
     const R = [];
-    const dP = val("date_panne"), dA = val("date_achat"), dM = val("mise_circulation");
-    const kP = toInt(val("km")), kA = toInt(val("km_achat"));
-    if (dP && dA) { const n = diffDays(dA, dP); R.push(n < 0 ? "Incohérence : la date de panne est antérieure à la date d’achat." : `Panne survenue ${duration(n)} après l’achat.`); }
-    if (kP !== null && kA !== null) { const d = kP - kA; R.push(d < 0 ? "Incohérence : kilométrage de panne inférieur au kilométrage à l’achat." : `${fmtN(d)} km parcourus entre l’achat et la panne.`); }
-    if (dP && dM) { const n = diffDays(dM, dP); if (n >= 0) R.push(`Âge du véhicule à la date de la panne : ${duration(n)}.`); }
     const ra = val("roulage_apres"); if (ra.startsWith("Oui")) R.push(`Le véhicule a roulé après les premiers symptômes (${ra.replace("Oui, ", "")}).`);
     const tr = val("travaux");
     if (tr === "Oui, la réparation a commencé") R.push("La réparation a commencé avant le dépôt du dossier.");
@@ -1345,10 +1328,6 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     line("Email", val("email")); line("Téléphone", val("telephone"));
     L.push("", "2. VÉHICULE");
     line("Marque et modèle", [val("marque").trim(), val("modele").trim()].filter(Boolean).join(" "));
-    line("Motorisation ou version", val("version")); line("Énergie", val("energie"));
-    line("Première mise en circulation", fmtDate(val("mise_circulation")));
-    line("Date d’achat", fmtDate(val("date_achat"))); line("Kilométrage à l’achat", fmtKm(val("km_achat")));
-    line("Acheté auprès", val("vendeur") && val("vendeur").toLowerCase());
     L.push("", "3. PANNE");
     line("Date", fmtDate(val("date_panne"))); line("Kilométrage", fmtKm(val("km")));
     line("Conditions d’apparition", checked("conditions").join(", "));
@@ -1358,12 +1337,13 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     line("Roule encore", val("vehicule_roulant")); line("Remorqué jusqu’au garage", val("remorque"));
     line("Description", val("description").trim());
     L.push("", "4. GARAGE");
-    line("Garage", val("garage_nom")); line("Ville", val("garage_ville")); line("Interlocuteur", val("garage_contact"));
+    line("Garage", val("garage_nom")); line("Ville", val("garage_ville"));
+    line("SIRET", val("siret")); line("Code NAF", val("naf")); line("Interlocuteur", val("garage_contact"));
     line("Téléphone", val("garage_tel")); line("Email", val("garage_email"));
     line("Entrée à l’atelier", fmtDate(val("date_depot"))); line("Montant du devis TTC", fmtEur(val("montant_devis")));
     line("Travaux déjà réalisés", val("travaux"));
     L.push("", "5. PIÈCES JOINTES À CET ENVOI");
-    DOCS.forEach(d => L.push(`${d.title} : ${files[d.key].length ? files[d.key].map(f => f.name).join(", ") : "non joint à cet envoi"}`));
+    DOCS.filter(d => !d.garage || role === "garage").forEach(d => L.push(`${d.title} : ${files[d.key].length ? files[d.key].map(f => f.name).join(", ") : "non joint à cet envoi"}`));
     const R = reperes();
     if (R.length) { L.push("", "6. REPÈRES CALCULÉS (à partir des déclarations, à confirmer sur pièces)"); R.forEach(r => L.push(`- ${r}`)); }
     return L.join("\n");
@@ -1414,7 +1394,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
           await serveur("ajouterPiece", dossier.id, dossier.jeton, { categorie: d.key, nom: g.name, type: g.type || "", base64 });
         }
         etape("Transmission à BW Support…");
-        const bilan = await serveur("finaliserDossier", dossier.id, dossier.jeton, { synthese, resume: resumeDossier() });
+        const champs = champsSauves(); Object.keys(champs).forEach(k => { if (!CHAMPS_PARTAGES.includes(k)) delete champs[k]; });
+        const bilan = await serveur("finaliserDossier", dossier.id, dossier.jeton, { synthese, resume: resumeDossier(), champs });
         manquantesDossier = bilan && Array.isArray(bilan.manquantes) ? bilan.manquantes : null;
         accuseEnvoye = !!(bilan && bilan.accuse);
       } else {
@@ -1458,11 +1439,12 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   function resumeDossier() {
     return {
       role, immat: val("immat"),
-      vehicule: [val("marque").trim(), val("modele").trim(), val("version").trim()].filter(Boolean).join(" "),
+      vehicule: [val("marque").trim(), val("modele").trim()].filter(Boolean).join(" "),
       client: [val("prenom").trim(), val("nom").trim().toUpperCase()].filter(Boolean).join(" "),
       clientEmail: val("email").trim(), clientTel: val("telephone").trim(),
       garage: [val("garage_nom").trim(), val("garage_ville").trim()].filter(Boolean).join(", "),
       garageContact: val("garage_contact").trim(), garageEmail: val("garage_email").trim(), garageTel: val("garage_tel").trim(),
+      siret: val("siret").trim(), naf: val("naf").trim(),
       datePanne: fmtDate(val("date_panne")), km: fmtKm(val("km")),
       montantDevis: fmtEur(val("montant_devis")), travaux: val("travaux")
     };
@@ -1517,6 +1499,9 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     const le = "13/11/2026 à 16h40";
     pieces.forEach(p => { if (p.categorie === "carte_grise" || p.categorie === "suivi_entretien") p.depots.push({ par: "client", le }); });
     return { immat: plaque, existe: true, ouvertLe: "13/11/2026", pieces, envois: [{ par: "client", le }], statut: "Pièces manquantes",
+      champs: { marque: "Peugeot", modele: "308", date_panne: "2026-11-03", km: "112 750", conditions: ["Moteur chaud", "Sur route ou autoroute"],
+        roulage_apres: "Non, arrêt immédiat", garage_nom: "Garage du Centre", garage_ville: "Nancy",
+        description: "Le 3 novembre au matin, sur autoroute à 110 km/h, le voyant moteur s’est allumé avec une perte de puissance. Arrêt immédiat sur une aire puis remorquage jusqu’au garage." },
       message: "Le diagnostic et le devis du garage sont attendus pour commencer l’étude." };
   }
   async function chargerDossier(plaque) {
@@ -1535,6 +1520,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       badge.className = "statut" + (/tude/.test(d.statut) ? " etude" : /cision|clos/i.test(d.statut) ? " fin" : "");
       const msg = $("#statutMsg"); msg.textContent = d.message || ""; msg.hidden = !d.message;
     }
+    champsDossier = d.champs || {};
     recuesDossier = new Set((d.pieces || []).filter(p => p.depots.length).map(p => p.categorie));
     DOCS.forEach(x => renderFiles(x.key));
     const tb = $("#etatPieces tbody"); tb.innerHTML = "";
@@ -1565,7 +1551,9 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     const b = $("#accesBtn");
     b.disabled = true; b.innerHTML = `<span class="spinner" aria-hidden="true"></span>Ouverture…`;
     try {
-      afficherDossier(await chargerDossier(plaque));
+      const d = await chargerDossier(plaque);
+      if (plaqueDossier && plaque !== plaqueDossier) { viderChamps(); brouillonRepris = ""; }
+      afficherDossier(d);
       plaqueDossier = plaque;
       const champ = $("#immat"); champ.value = plaque; champ.readOnly = true; formatImmat(champ);
       touched.add("immat"); validateField("immat", true);
@@ -1631,28 +1619,48 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   window.addEventListener("pagehide", sauverBrouillon);
   document.addEventListener("visibilitychange", () => { if (document.visibilityState === "hidden") sauverBrouillon(); });
 
-  function reprendreBrouillon() {
-    if (!plaqueDossier || !role) return;
-    const cle = cleBrouillon();
-    if (brouillonRepris === cle) return;
-    brouillonRepris = cle;
-    const b = stock.lire(cle);
-    if (!b || !b.v || Date.now() - b.t > DUREE_BROUILLON) { $("#brouillon").hidden = true; return; }
-    Object.entries(b.v).forEach(([n, val]) => {
-      const els = $$(`[name="${n}"]`, form);
-      els.forEach(el => {
+  function remplirChamps(v) {
+    Object.entries(v).forEach(([n, val]) => {
+      $$(`[name="${n}"]`, form).forEach(el => {
         if (el.type === "radio") el.checked = el.value === val;
         else if (el.type === "checkbox") el.checked = Array.isArray(val) && val.includes(el.value);
         else if (el.type !== "file") el.value = val;
       });
       touched.add(n);
     });
-    VALIDATED.forEach(n => { if (b.v[n] !== undefined) validateField(n, true); });
+    VALIDATED.forEach(n => { if (v[n] !== undefined) validateField(n, true); });
+  }
+  function reprendreBrouillon() {
+    if (!plaqueDossier || !role) return;
+    const cle = cleBrouillon();
+    if (brouillonRepris === cle) return;
+    brouillonRepris = cle;
+    const textes = [];
+    const partages = {};
+    Object.keys(champsDossier).forEach(k => { if (CHAMPS_PARTAGES.includes(k)) partages[k] = champsDossier[k]; });
+    if (Object.keys(partages).length) {
+      remplirChamps(partages);
+      textes.push("Les informations déjà transmises pour ce véhicule (garage, véhicule, panne) ont été reprises : vérifiez-les et complétez si besoin.");
+    }
+    const b = stock.lire(cle);
+    if (b && b.v && Date.now() - b.t <= DUREE_BROUILLON) {
+      remplirChamps(b.v);
+      const quand = new Date(b.t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(" ", " à ");
+      textes.push(`Votre saisie du ${quand} a été reprise. Les fichiers joints sont à ajouter de nouveau.`);
+    }
     updateCounter();
-    const quand = new Date(b.t).toLocaleString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }).replace(" ", " à ");
-    $("#brouillonTexte").textContent = `Votre saisie du ${quand} a été reprise. Les fichiers joints sont à ajouter de nouveau.`;
-    $("#brouillon").hidden = false;
+    $("#brouillonTexte").textContent = textes.join(" ");
+    $("#brouillon").hidden = !textes.length;
     update();
+  }
+  function viderChamps() {
+    Array.from(form.elements).forEach(el => {
+      if (!el.name || NON_SAUVES.has(el.name) || el.type === "file") return;
+      if (el.type === "radio" || el.type === "checkbox") el.checked = false; else el.value = "";
+      clearError(el.name); touched.delete(el.name);
+    });
+    DOCS.forEach(d => { files[d.key] = []; renderFiles(d.key); });
+    updateCounter();
   }
   function effacerBrouillon() {
     if (plaqueDossier && role) stock.retirer(cleBrouillon());
@@ -1662,12 +1670,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   }
   $("#brouillonEffacer").addEventListener("click", () => {
     effacerBrouillon();
-    Array.from(form.elements).forEach(el => {
-      if (!el.name || NON_SAUVES.has(el.name) || el.type === "file") return;
-      if (el.type === "radio" || el.type === "checkbox") el.checked = false; else el.value = "";
-      clearError(el.name); touched.delete(el.name);
-    });
-    updateCounter(); update();
+    viderChamps(); update();
   });
   function proposerReprise() {
     const d = stock.lire(CLE_DERNIER);
