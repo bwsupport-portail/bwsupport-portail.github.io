@@ -161,7 +161,7 @@ main{min-width:0}
 .who-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .who-card{position:relative;display:block;cursor:pointer}
 .who-card input{position:absolute;opacity:0;width:1px;height:1px}
-.who-body{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;height:100%;padding:18px 44px 18px 18px;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:14px;transition:border-color .15s,background .15s,box-shadow .15s}
+.who-body{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:14px;align-items:center;height:100%;padding:18px 44px 18px 18px;background:var(--surface);border:1.5px solid var(--line-strong);border-radius:14px;transition:border-color .15s,background .15s,box-shadow .15s,opacity .3s ease,filter .3s ease}
 .who-card:hover .who-body{border-color:var(--ink)}
 .who-icon{grid-row:1 / span 2;width:46px;height:46px;border-radius:12px;background:var(--paper);color:var(--heading);display:grid;place-items:center}
 .who-name{font-family:var(--font-display);font-weight:700;font-size:17px;line-height:1.15}
@@ -174,6 +174,11 @@ main{min-width:0}
 .who-card input:checked + .who-body .who-check .ic{opacity:1}
 .who-card input:focus-visible + .who-body{outline:3px solid var(--focus);outline-offset:3px}
 .who.invalid .who-body{border-color:var(--error)}
+/* Page d’entrée : parties grisées tant qu’aucune plaque valide n’est saisie */
+.who-note{font-size:14.5px;color:var(--muted);margin:-4px 0 12px}
+.who.verrou .who-card{cursor:not-allowed}
+.who.verrou .who-body{opacity:.45;filter:grayscale(1)}
+.who.verrou .who-card:hover .who-body{border-color:var(--line-strong)}
 
 /* Accès au dossier par immatriculation */
 .acces,.dossier{margin-bottom:22px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-panel)}
@@ -559,12 +564,13 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
 
     <form id="claimForm" novalidate>
 
-      <section class="who" id="who" hidden aria-labelledby="whoTitle">
+      <section class="who verrou" id="who" aria-labelledby="whoTitle">
         <h2 id="whoTitle">Quelle partie remplissez-vous ?</h2>
+        <p class="who-note" id="whoVerrou">Saisissez la plaque d’immatriculation ci-dessus pour activer votre choix.</p>
         <p class="msg-partie" id="msgPartie" aria-live="polite" hidden></p>
         <div class="who-cards" role="radiogroup" aria-labelledby="whoTitle" aria-describedby="err-qui">
           <label class="who-card">
-            <input type="radio" name="qui" value="garage">
+            <input type="radio" name="qui" value="garage" disabled>
             <span class="who-body">
               <span class="who-icon"><svg class="ic"><use href="#i-garage"/></svg></span>
               <span class="who-name">Partie professionnelle</span>
@@ -573,7 +579,7 @@ dialog.legal::backdrop{background:rgba(9,20,40,.55)}
             </span>
           </label>
           <label class="who-card">
-            <input type="radio" name="qui" value="client">
+            <input type="radio" name="qui" value="client" disabled>
             <span class="who-body">
               <span class="who-icon"><svg class="ic"><use href="#i-user"/></svg></span>
               <span class="who-name">Partie client</span>
@@ -1405,12 +1411,17 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     $("#who").classList.remove("invalid"); $("#err-qui").textContent = "";
     $("#ribBloc").hidden = r !== "garage";
     placerPieces();
-    $("#formBody").hidden = !plaqueDossier;
-    if (plaqueDossier) reprendreBrouillon();
+    const dossierOuvert = !!plaqueDossier && $("#acces").hidden;
+    $("#formBody").hidden = !dossierOuvert;
+    if (dossierOuvert) reprendreBrouillon();
     buildLights();
     update();
   }
   $$('input[name="qui"]').forEach(r => r.addEventListener("change", () => setRole(r.value)));
+  const ouvrirDepuisEntree = () => setTimeout(() => {
+    if (role && !$("#acces").hidden && isImmat(formaterPlaque($("#accesImmat").value).trim())) $("#accesForm").requestSubmit();
+  }, 0);
+  $$('input[name="qui"]').forEach(r => { r.addEventListener("click", ouvrirDepuisEntree); r.addEventListener("change", ouvrirDepuisEntree); });
 
   /* ---------- Validation ---------- */
   function clearError(name) {
@@ -1774,9 +1785,16 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     });
   }
   const accesInput = $("#accesImmat");
-  accesInput.addEventListener("input", () => { accesInput.value = formaterPlaque(accesInput.value); $("#err-acces").textContent = ""; });
+  function majVerrouParties() {
+    const actif = $("#acces").hidden || isImmat(formaterPlaque(accesInput.value).trim());
+    $("#who").classList.toggle("verrou", !actif);
+    $$('input[name="qui"]').forEach(r => { r.disabled = !actif; });
+    $("#whoVerrou").hidden = actif;
+  }
+  accesInput.addEventListener("input", () => { accesInput.value = formaterPlaque(accesInput.value); $("#err-acces").textContent = ""; majVerrouParties(); });
   $("#accesForm").addEventListener("submit", async e => {
     e.preventDefault();
+    if ($("#accesBtn").disabled) return;
     const plaque = formaterPlaque(accesInput.value).trim();
     if (!isImmat(plaque)) { $("#err-acces").textContent = MSG.immat; accesInput.focus(); return; }
     const b = $("#accesBtn");
@@ -1789,6 +1807,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       const champ = $("#immat"); champ.value = plaque; champ.readOnly = true; formatImmat(champ);
       touched.add("immat"); validateField("immat", true);
       $("#acces").hidden = true; $("#dossier").hidden = false; $("#who").hidden = false;
+      majVerrouParties();
       if (role) { $("#formBody").hidden = false; reprendreBrouillon(); }
       update();
       $("#dossier").scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
@@ -1799,8 +1818,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     }
   });
   $("#changerVehicule").addEventListener("click", () => {
-    $("#dossier").hidden = true; $("#who").hidden = true; $("#formBody").hidden = true; $("#acces").hidden = false;
-    accesInput.value = plaqueDossier; accesInput.focus(); accesInput.select();
+    $("#dossier").hidden = true; $("#formBody").hidden = true; $("#acces").hidden = false;
+    accesInput.value = plaqueDossier; majVerrouParties(); accesInput.focus(); accesInput.select();
   });
   $("#retourDossier").addEventListener("click", async () => {
     DOCS.forEach(d => { files[d.key] = []; renderFiles(d.key); $(`#err-${d.key}`).textContent = ""; });
@@ -1931,7 +1950,8 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   if (qp === "garage" || qp === "client") { const r = form.querySelector(`input[name="qui"][value="${qp}"]`); r.checked = true; setRole(qp); }
   update();
   const immatLien = formaterPlaque(IMMAT_INITIALE || new URLSearchParams(location.search).get("immat") || "").trim();
-  if (immatLien && isImmat(immatLien)) { accesInput.value = immatLien; $("#accesForm").requestSubmit(); }
+  majVerrouParties();
+  if (immatLien && isImmat(immatLien)) { accesInput.value = immatLien; majVerrouParties(); $("#accesForm").requestSubmit(); }
   else proposerReprise();
 
   // Mise du contact : tous les voyants s'allument et l'aiguille balaie le cadran, comme au démarrage d'un véhicule.
