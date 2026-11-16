@@ -893,15 +893,15 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
   ];
 
   const DOCS = [
-    { key: "diagnostic", req: true, icon: "i-pulse", short: "Diagnostic", miss: "le diagnostic",
+    { key: "diagnostic", req: true, bloquant: true, icon: "i-pulse", short: "Diagnostic", miss: "le diagnostic",
       title: "Diagnostic du garage", desc: "Le compte rendu du garage qui identifie l’origine de la panne et la pièce en cause.",
       missing: "Ajoutez le diagnostic du garage.",
       exemple: ["Compte rendu daté, avec l’immatriculation ou le numéro de série (VIN)", "Codes défaut relevés à la valise et leur libellé", "Pièce en cause et origine de la panne", "Nom, tampon ou signature du garage"] },
-    { key: "devis", req: true, icon: "i-quote", short: "Devis", miss: "le devis",
+    { key: "devis", req: true, bloquant: true, icon: "i-quote", short: "Devis", miss: "le devis",
       title: "Devis de réparation", desc: "Le devis détaillé des réparations, pièces et main-d’œuvre, établi par le garage.",
       missing: "Ajoutez le devis de réparation.",
       exemple: ["Détail des pièces avec leurs références et prix", "Main-d’œuvre : nombre d’heures et taux horaire", "Montants HT, TVA et TTC", "Immatriculation, kilométrage et coordonnées du garage"] },
-    { key: "carte_grise", req: true, icon: "i-card", short: "Carte grise", miss: "la carte grise",
+    { key: "carte_grise", req: true, bloquant: true, icon: "i-card", short: "Carte grise", miss: "la carte grise",
       title: "Carte grise", desc: "Le certificat d’immatriculation du véhicule, entièrement lisible.",
       missing: "Ajoutez la carte grise du véhicule.",
       exemple: ["Le document entier, les quatre coins visibles", "Net, sans reflet ni doigt sur le texte", "Nom du titulaire et date de première immatriculation lisibles", "Véhicule récemment acheté : le certificat provisoire convient"] },
@@ -909,7 +909,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       title: "Suivi d’entretien", desc: "Le carnet d’entretien tamponné ou les factures des révisions réalisées.",
       missing: "Ajoutez le carnet ou les factures d’entretien.",
       exemple: ["Toutes les révisions depuis l’achat du véhicule", "Pour chaque révision : date et kilométrage lisibles", "Factures détaillées (vidange, filtres…) ou pages tamponnées du carnet", "Plusieurs photos ou un PDF regroupé, au choix"] },
-    { key: "controle_technique", reqRoles: ["client"], icon: "i-check", short: "Contrôle technique", miss: "le dernier contrôle technique",
+    { key: "controle_technique", reqRoles: ["garage", "client"], bloquant: true, icon: "i-check", short: "Contrôle technique", miss: "le dernier contrôle technique",
       title: "Dernier contrôle technique", desc: "Le procès-verbal du dernier contrôle technique réalisé sur le véhicule.",
       missing: "Ajoutez le procès-verbal du dernier contrôle technique.",
       exemple: ["Le procès-verbal complet, toutes les pages", "Date du contrôle et kilométrage lisibles", "Résultat : favorable, contre-visite ou défavorable", "Véhicule de moins de 4 ans, sans contrôle encore : joignez la carte grise à la place"] },
@@ -935,6 +935,9 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     delete d.req;
     Object.defineProperty(d, "req", { get() { return visible(d) && d.reqRoles.includes(partie()); } });
   });
+
+  /* Pièces sans lesquelles l’envoi est refusé (jointes maintenant ou déjà reçues au dossier). */
+  const piecesBloquantesManquantes = () => DOCS.filter(d => d.bloquant && visible(d) && !files[d.key].length && !recuesDossier.has(d.key));
 
   const MSG = {
     qui: "Indiquez qui remplit ce dossier.",
@@ -1127,7 +1130,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
       <div class="doc-info">
         <span class="doc-icon"><svg class="ic"><use href="#${d.icon}"/></svg></span>
         <div><h4 class="doc-title">${d.title}</h4><p class="doc-desc">${d.desc}</p>${exempleHTML(d)}
-        <span class="pill${d.req ? "" : " pill-opt"}" id="pill-${d.key}">${d.req ? "À fournir" : "Facultatif"}</span></div>
+        <span class="pill${d.req ? "" : " pill-opt"}" id="pill-${d.key}">${d.bloquant ? "Obligatoire" : d.req ? "À fournir" : "Facultatif"}</span></div>
       </div>
       <div class="doc-upload">
         <label class="drop" id="drop-${d.key}">
@@ -1190,7 +1193,7 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     $(`#row-${key}`).classList.toggle("has-files", n > 0);
     if (n) { pill.className = "pill ok"; pill.innerHTML = `<svg class="ic"><use href="#i-check"/></svg>${n} fichier${n > 1 ? "s" : ""} ajouté${n > 1 ? "s" : ""}`; }
     else if (recuesDossier.has(key)) { pill.className = "pill ok"; pill.innerHTML = `<svg class="ic"><use href="#i-check"/></svg>Déjà au dossier`; }
-    else { pill.className = `pill${d.req ? "" : " pill-opt"}`; pill.textContent = d.req ? "À fournir" : "Facultatif"; }
+    else { pill.className = `pill${d.req ? "" : " pill-opt"}`; pill.textContent = d.bloquant ? "Obligatoire" : d.req ? "À fournir" : "Facultatif"; }
   }
   $$(".drop input[type=file]").forEach(inp => {
     inp.addEventListener("change", () => { addFiles(inp.dataset.doc, inp.files); inp.value = ""; });
@@ -1337,12 +1340,15 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
     const manqueInfos = orderedSections().filter(s => !st[s.key]).map(s => pick(s.miss));
     const manquePieces = DOCS.filter(d => d.req && !st[d.key]).map(d => d.miss);
     const status = $("#sendStatus");
+    const bloquantes = piecesBloquantesManquantes().map(d => d.miss);
     status.textContent = manqueInfos.length
       ? `Encore à compléter : ${joinFr(manqueInfos)}.`
+      : bloquantes.length
+        ? `Pour envoyer, ajoutez ${joinFr(bloquantes)}.`
       : manquePieces.length
         ? `Vous pouvez envoyer. Encore manquantes au dossier : ${joinFr(manquePieces)}. Le garage ou le client peut les envoyer avec ce même lien.`
         : "Le dossier est complet, vous pouvez l’envoyer.";
-    status.classList.toggle("ready", !manqueInfos.length);
+    status.classList.toggle("ready", !manqueInfos.length && !bloquantes.length);
   }
 
   /* ---------- Fiche de synthèse ---------- */
@@ -1399,6 +1405,11 @@ const API_PORTAIL = "https://script.google.com/macros/s/AKfycbwB6vLsHsnYD8lpD-1A
         const n = f.dataset.field; if (!VALIDATED.includes(n)) return;
         touched.add(n);
         if (!validateField(n, true)) mark(form.querySelector(`[name="${n}"]`));
+      });
+      piecesBloquantesManquantes().forEach(d => {
+        $(`#row-${d.key}`).classList.add("invalid");
+        $(`#err-${d.key}`).textContent = d.missing || "Ajoutez ce document.";
+        mark($(`#drop-${d.key} input`));
       });
       if (!$("#certification").checked) {
         const f = form.querySelector('.field[data-field="certification"]'); f.classList.add("invalid");
