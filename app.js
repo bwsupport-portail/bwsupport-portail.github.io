@@ -50,20 +50,20 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
       req: { garage: ["garage_nom", "garage_ville", "siret", "naf", "garage_contact", "garage_tel", "garage_email", "date_depot", "travaux"],
              client: ["garage_nom", "garage_ville"] } },
     { key: "client", step: "step-client", icon: "i-user",
-      name: { garage: "Client", client: "Coordonnées" }, miss: { garage: "le client", client: "vos coordonnées" },
+      only: "garage", name: { garage: "Bénéficiaire", client: "Coordonnées" }, miss: { garage: "le bénéficiaire", client: "vos coordonnées" },
       req: { garage: ["nom", "prenom", "email"], client: ["nom", "prenom", "email", "telephone"] } },
     { key: "vehicule", step: "step-vehicule", icon: "i-car", name: "Véhicule", miss: "le véhicule",
       req: { garage: ["immat", "marque", "modele"], client: ["immat", "marque", "modele"] } },
-    { key: "panne", step: "step-panne", icon: "i-engine", name: "Panne", miss: "la panne",
+    { key: "panne", step: "step-panne", only: "garage", icon: "i-engine", name: "Panne", miss: "la panne",
       req: { garage: PANNE_REQ, client: PANNE_REQ } }
   ];
 
   const DOCS = [
-    { key: "diagnostic", req: true, bloquant: true, icon: "i-pulse", short: "Diagnostic", miss: "le diagnostic",
+    { key: "diagnostic", req: true, bloquant: true, only: "garage", icon: "i-pulse", short: "Diagnostic", miss: "le diagnostic",
       title: "Diagnostic du garage", desc: "Le compte rendu du garage qui identifie l’origine de la panne et la pièce en cause.",
       missing: "Ajoutez le diagnostic du garage.",
       exemple: ["Compte rendu daté, avec l’immatriculation ou le numéro de série (VIN)", "Codes défaut relevés à la valise et leur libellé", "Pièce en cause et origine de la panne", "Nom, tampon ou signature du garage"] },
-    { key: "devis", req: true, bloquant: true, icon: "i-quote", short: "Devis", miss: "le devis",
+    { key: "devis", req: true, bloquant: true, only: "garage", icon: "i-quote", short: "Devis", miss: "le devis",
       rappel: "Devis contrôlé à partir des données constructeur ; main-d’œuvre retenue selon le barème du constructeur.",
       title: "Devis de réparation", desc: "Le devis détaillé des réparations, pièces et main-d’œuvre, établi par le garage.",
       missing: "Ajoutez le devis de réparation.",
@@ -76,7 +76,7 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
       title: "Suivi d’entretien", desc: "Le carnet d’entretien tamponné ou les factures des révisions réalisées.",
       missing: "Ajoutez le carnet ou les factures d’entretien.",
       exemple: ["Toutes les révisions depuis l’achat du véhicule", "Pour chaque révision : date et kilométrage lisibles", "Factures détaillées (vidange, filtres…) ou pages tamponnées du carnet", "Plusieurs photos ou un PDF regroupé, au choix"] },
-    { key: "controle_technique", reqRoles: ["garage", "client"], bloquant: true, icon: "i-check", short: "Contrôle technique", miss: "le dernier contrôle technique",
+    { key: "controle_technique", reqRoles: ["garage"], bloquant: true, only: "garage", icon: "i-check", short: "Contrôle technique", miss: "le dernier contrôle technique",
       title: "Dernier contrôle technique", desc: "Le procès-verbal du dernier contrôle technique réalisé sur le véhicule.",
       missing: "Ajoutez le procès-verbal du dernier contrôle technique.",
       exemple: ["Le procès-verbal complet, toutes les pages", "Date du contrôle et kilométrage lisibles", "Résultat : favorable, contre-visite ou défavorable", "Véhicule de moins de 4 ans, sans contrôle encore : joignez la carte grise à la place"] },
@@ -87,13 +87,13 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
     { key: "rib", reqRoles: ["garage"], bloquant: true, only: "garage", icon: "i-card", short: "RIB", miss: "le RIB du garage",
       title: "RIB du garage", desc: "Une photo ou un PDF du relevé d’identité bancaire du garage, au nom de l’entreprise. Il n’est jamais réaffiché sur le portail. Il sert exclusivement au règlement des réparations prises en charge.",
       missing: "Ajoutez le RIB du garage (une photo suffit)." },
-    { key: "compteur", req: true, bloquant: true, icon: "i-gauge", short: "Compteur", miss: "la photo du compteur",
+    { key: "compteur", req: true, bloquant: true, only: "garage", icon: "i-gauge", short: "Compteur", miss: "la photo du compteur",
       title: "Photo du compteur", desc: "Le tableau de bord, contact mis, avec le kilométrage lisible.",
       missing: "Ajoutez une photo du compteur kilométrique.",
       exemple: ["Contact mis, tableau de bord allumé", "Kilométrage entièrement lisible, sans reflet", "Voyants allumés visibles s’il y en a", "Photo prise au téléphone : elle est allégée automatiquement"] },
-    { key: "jdd", icon: "i-pulse",
+    { key: "jdd", only: "garage", icon: "i-pulse",
       title: "Historique des défauts (JDD)", desc: "Si nécessaire : le journal des défauts relevé à la valise de diagnostic, avec les codes et leur date d’apparition." },
-    { key: "photos", req: false, icon: "i-camera",
+    { key: "photos", req: false, only: "garage", icon: "i-camera",
       title: "Photos de la panne", desc: "Voyants allumés, pièce endommagée, fuite, compartiment moteur." },
     { key: "autres", req: false, icon: "i-file",
       title: "Autres documents", desc: "Factures de réparations antérieures, rapport d’expertise, tout document utile." }
@@ -113,8 +113,8 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
   //   false : aucune pièce ne bloque le dépôt (décision D1 : la référence ne bloque jamais un dépôt) – réglage retenu ;
   //   true  : chaque envoi doit contenir lui-même toutes les pièces obligatoires de la partie (complétude stricte).
   const BLOCAGE_SANS_CONSULTATION = false;
-  const piecesExigees = () => consultation || BLOCAGE_SANS_CONSULTATION;
-  const piecesBloquantesManquantes = () => piecesExigees() ? DOCS.filter(d => d.bloquant && visible(d) && !files[d.key].length && !recuesDossier.has(d.key)) : [];
+  const piecesExigees = () => partie() === "garage" || consultation || BLOCAGE_SANS_CONSULTATION;
+  const piecesBloquantesManquantes = () => piecesExigees() ? DOCS.filter(d => (partie() === "garage" ? d.req : d.bloquant) && visible(d) && !files[d.key].length && !recuesDossier.has(d.key)) : [];
 
   const MSG = {
     qui: "Indiquez qui remplit ce dossier.",
@@ -336,7 +336,7 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
       if (!vis && files[d.key].length) files[d.key] = [];
       row.hidden = !vis;
       if (!vis) { row.classList.remove("invalid"); const e = $(`#err-${d.key}`); if (e) e.textContent = ""; }
-      (d.only === "garage" ? $("#docsGarage") : d.req ? $("#docsRequired") : $("#docsOptional")).appendChild(row);
+      (d.key === "rib" ? $("#docsGarage") : d.req ? $("#docsRequired") : $("#docsOptional")).appendChild(row);
       renderFiles(d.key);
     });
   }
@@ -562,7 +562,7 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
           ? `Vous pouvez envoyer. Pièces non jointes à cet envoi : ${joinFr(manquePieces)} ; si elles ont déjà été transmises, BW Support les retrouvera au dossier.`
           : "Vous pouvez envoyer : BW Support vérifiera que le dossier est complet.")
       : manquePieces.length
-        ? `Vous pouvez envoyer. Encore manquantes au dossier : ${joinFr(manquePieces)}. Le garage ou le client peut les envoyer avec ce même lien.`
+        ? `Vous pouvez envoyer. Encore manquantes au dossier : ${joinFr(manquePieces)}. Le réparateur ou le bénéficiaire peut les envoyer avec ce même lien.`
         : "Le dossier est complet, vous pouvez l’envoyer.";
     status.classList.toggle("ready", !manqueInfos.length && !bloquantes.length);
   }
@@ -731,12 +731,12 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
     effacerBrouillon();
     const retour = contact ? ` et reviendra vers vous à l’adresse ${contact}.` : ".";
     $("#successText").textContent = consultation
-      ? `Merci. Le dossier a bien été transmis à BW Support. Le gestionnaire en charge l’étudie${retour}` +
+      ? `Merci. Le dossier a bien été transmis à BW Support. Un technicien expert de garantie l’étudie${retour}` +
         (accuseEnvoye ? ` Un accusé de réception vient de vous être envoyé à cette adresse.` : "") +
         (manquantes.length
-          ? ` Pièces encore manquantes au dossier : ${joinFr(manquantes)}. Le garage ou le client peut les ajouter avec ce même lien, l’immatriculation et la référence du contrat.`
+          ? ` Pièces encore manquantes au dossier : ${joinFr(manquantes)}. Le réparateur ou le bénéficiaire peut les ajouter avec ce même lien, l’immatriculation et la référence du contrat.`
           : " Toutes les pièces obligatoires du dossier ont été reçues.")
-      : `Merci. Votre envoi a bien été transmis à BW Support. Le gestionnaire en charge l’étudie${retour}` +
+      : `Merci. Votre envoi a bien été transmis à BW Support. Un technicien expert de garantie l’étudie${retour}` +
         (accuseEnvoye ? ` Un accusé de réception vient de vous être envoyé à cette adresse.` : "");
     const nbFiles = DOCS.reduce((a, d) => a + files[d.key].length, 0);
     const rows = [
@@ -1043,7 +1043,7 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
     const d = stock.lire(CLE_DERNIER);
     if (!d || d.v3 !== true || !d.plaque || Date.now() - d.t > DUREE_BROUILLON) return;
     if (!stock.lire(`${CLE_BROUILLON}${d.plaque}:${d.role}`)) return;
-    $("#repriseTexte").textContent = `Un brouillon est enregistré sur cet appareil pour le véhicule ${d.plaque} (${d.role === "garage" ? "partie professionnelle" : "partie client"}).`;
+    $("#repriseTexte").textContent = `Un brouillon est enregistré sur cet appareil pour le véhicule ${d.plaque} (${d.role === "garage" ? "partie réparateur" : "partie bénéficiaire"}).`;
     $("#reprise").hidden = false;
     $("#repriseBtn").onclick = () => {
       const r = form.querySelector(`input[name="qui"][value="${d.role}"]`);

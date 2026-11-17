@@ -88,10 +88,10 @@
     <section class="intro" id="intro">
       <h1>Bienvenue, nous sommes là pour vous accompagner</h1>
       <p class="accroche">Avec un dossier complet, nous avançons plus vite pour vous.</p>
-      <p>Votre demande de prise en charge au titre de votre garantie panne mécanique est entre de bonnes mains. Le garage et le client déposent ici, en quelques minutes, leurs informations et leurs pièces justificatives ; un gestionnaire BW Support étudie ensuite le dossier et revient vers vous par e-mail.</p>
+      <p>Votre demande de prise en charge au titre de votre garantie panne mécanique est entre de bonnes mains. Le réparateur et le bénéficiaire déposent ici, en quelques minutes, leurs informations et leurs pièces justificatives ; un technicien expert de garantie étudie ensuite le dossier et revient vers vous.</p>
       <div class="keep">
         <svg class="ic"><use href="#i-list"/></svg>
-        <span>À avoir sous la main : le diagnostic, le devis, la carte grise, le suivi d’entretien et le dernier contrôle technique ; pour le client, la déclaration de cession ; pour le garage, son RIB.</span>
+        <span>À avoir sous la main. Réparateur : le diagnostic, le devis, la carte grise, le suivi d’entretien, le dernier contrôle technique, la photo du compteur et son RIB. Bénéficiaire : la carte grise, le suivi d’entretien et la déclaration de cession.</span>
       </div>
     </section>
 
@@ -147,7 +147,7 @@
             <input type="radio" name="qui" value="garage" disabled>
             <span class="who-body">
               <span class="who-icon"><svg class="ic"><use href="#i-garage"/></svg></span>
-              <span class="who-name">Partie professionnelle</span>
+              <span class="who-name">Partie réparateur</span>
               <span class="who-desc">Garage ou réparateur : diagnostic, devis, travaux.</span>
               <span class="who-check"><svg class="ic"><use href="#i-check"/></svg></span>
             </span>
@@ -156,8 +156,8 @@
             <input type="radio" name="qui" value="client" disabled>
             <span class="who-body">
               <span class="who-icon"><svg class="ic"><use href="#i-user"/></svg></span>
-              <span class="who-name">Partie client</span>
-              <span class="who-desc">Titulaire de la garantie : panne, carte grise, entretien, contrôle technique, cession.</span>
+              <span class="who-name">Partie bénéficiaire</span>
+              <span class="who-desc">Titulaire de la garantie : carte grise, suivi d’entretien, déclaration de cession.</span>
               <span class="who-check"><svg class="ic"><use href="#i-check"/></svg></span>
             </span>
           </label>
@@ -253,8 +253,8 @@
         </fieldset>
 
         <!-- Client -->
-        <fieldset class="step" id="step-client">
-          <legend class="step-legend"><span class="step-num">2</span><span data-garage="Le client" data-client="Vos coordonnées">Le client</span></legend>
+        <fieldset class="step" id="step-client" data-seulement="garage">
+          <legend class="step-legend"><span class="step-num">2</span><span data-garage="Le bénéficiaire" data-client="Vos coordonnées">Le bénéficiaire</span></legend>
           <p class="step-intro" data-garage="Le titulaire de la garantie, propriétaire du véhicule." data-client="Pour vous joindre au sujet de votre dossier.">Le titulaire de la garantie, propriétaire du véhicule.</p>
           <div class="grid">
             <div class="field" data-field="nom">
@@ -304,7 +304,7 @@
         </fieldset>
 
         <!-- Panne -->
-        <fieldset class="step" id="step-panne">
+        <fieldset class="step" id="step-panne" data-seulement="garage">
           <legend class="step-legend"><span class="step-num">4</span>La panne</legend>
           <p class="step-intro">Quand, comment et dans quelles conditions elle est apparue.</p>
           <div class="grid">
@@ -409,7 +409,7 @@
           <p class="step-intro">Une photo nette et lisible prise au téléphone suffit. Formats acceptés : PDF, JPG, PNG ou HEIC. Les photos sont allégées automatiquement ; un PDF ne doit pas dépasser 10 Mo.</p>
           <div class="docs-block">
             <h3 class="docs-title">Documents obligatoires</h3>
-            <p class="docs-sub">Envoyez ceux que vous avez. Les autres peuvent être ajoutés plus tard par le garage ou par le client, avec ce même lien, l’immatriculation et la référence du contrat.</p>
+            <p class="docs-sub"><span data-garage="Toutes ces pièces sont nécessaires pour envoyer : celles déjà reçues au dossier comptent." data-client="Envoyez ceux que vous avez. Les autres pourront être ajoutés plus tard avec ce même lien, l’immatriculation et la référence du contrat.">Toutes ces pièces sont nécessaires pour envoyer : celles déjà reçues au dossier comptent.</span></p>
             <div id="docsRequired"></div>
           </div>
           <div class="docs-block">
