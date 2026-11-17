@@ -454,3 +454,33 @@ dialog.legal::backdrop{background:rgba(6,36,44,.55)}
 @media (max-width:640px){.step-legend{padding-bottom:18px}.step-legend::before,.step-legend::after{left:46px;bottom:7px}.step-legend::before{right:16px}.step-legend::after{width:calc((100% - 62px) * var(--avance, 0))}}
 @media (prefers-reduced-motion:reduce){.step-legend::after{transition:none}}
 .pill:not(.ok):not(.pill-opt){background:var(--orange);color:var(--on-orange)}
+:root{
+  --paper:#F2F4F8; --surface:#FFFFFF; --surface-2:#F5F7FA; --field:#FFFFFF;
+  --ink:#13294B; --ink-2:#2E4468; --muted:#5C6B82; --heading:#13294B; --placeholder:#8D99AC;
+  --line:#D8DFE9; --line-strong:#B5C1D2;
+  --verrou-bg:#D3D9E1; --verrou-line:#AEB7C4; --verrou-ink:#69737F; --verrou-icon:#C2CAD5;
+  --solid:#13294B; --solid-hover:#1E3B66; --on-solid:#FFFFFF;
+  --on-orange:#13294B;
+  --cluster:#13294B; --cluster-2:#1E3B66; --cluster-ink:#DDE6F2; --cluster-muted:#8FA3BF;
+  --marine:#13294B;
+  --amber:#9CC0EE; --amber-ink:#2A5694;
+  --grad-marine:linear-gradient(135deg,#2A4F86 0%,#13294B 60%,#0D1E39 100%);
+  --grad-clair:linear-gradient(90deg,#3F6DAE 0%,#9CC0EE 100%);
+  --green:#2E9E6A; --green-soft:#E2F3E9; --green-ink:#1D6B46;
+  --warn-soft:#E3EAF5; --warn-ink:#13294B;
+  --error:#B5381F; --error-soft:#FBEBE7; --error-field:#FFFCFB;
+  --focus:#2A5694; --focus-ring:rgba(42,86,148,.22);
+  --drop:#F7F9FB; --drop-hover:#EEF4FB;
+  --note-bg:#E3EAF5; --note-line:#B5C1D2; --note-ink:#13294B;
+  --cl-dim:#4A5F72; --cl-focus:#8CB8E8; --cl-tick:#5B7083; --cl-tick-major:#B9C8D6; --cl-full:#4CC38A;
+  --ac-bg:#FFF1C2; --ac-ink:#5C4300; --ac-line:#C99A00;
+}
+.btn{background:var(--grad-marine);color:#FFFFFF}
+.btn:hover:not(:disabled){background:var(--grad-marine);filter:brightness(1.12)}
+.foot{color:#C9D5E6}
+.g-zone{stroke:rgba(76,195,138,.6)}
+.g-needle polygon{fill:#C9DCF6}
+.step-legend{background:linear-gradient(90deg,#13294B 0%,#2A4F86 75%,#3F6DAE 100%);box-shadow:0 6px 18px rgba(19,41,75,.2)}
+dialog.legal::backdrop{background:rgba(9,20,40,.55)}
+.brand{color:#0B3C48;font-family:"Space Grotesk",Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:-.02em}
+.brand-w{color:#FF7A1A}
