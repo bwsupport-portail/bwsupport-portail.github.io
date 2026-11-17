@@ -484,3 +484,38 @@ dialog.legal::backdrop{background:rgba(6,36,44,.55)}
 dialog.legal::backdrop{background:rgba(9,20,40,.55)}
 .brand{color:#0B3C48;font-family:"Space Grotesk",Arial,Helvetica,sans-serif;font-weight:700;letter-spacing:-.02em}
 .brand-w{color:#FF7A1A}
+body{background:#13294B}
+.topbar .brand{color:#FFFFFF}
+.topbar .brand-gere{color:#AFC0D8}
+.topbar .brand-gere b{color:#FFFFFF}
+.topbar-note{color:#C9D5E6}
+.intro h1{color:#FFFFFF}
+.intro p{color:#DDE6F2}
+.intro .accroche{color:#FFFFFF;border-left-color:#FF7A1A}
+.who h2{color:#FFFFFF}
+.who-note{color:#C9D5E6}
+#aide-brouillon{color:#C9D5E6}
+.cluster{box-shadow:0 0 0 1px rgba(255,255,255,.14),0 18px 40px -20px rgba(0,0,0,.6)}
+.foot{background:#0D1E39;border-top:1px solid rgba(255,255,255,.1)}
+.demo-strip{background:#0D1E39;color:#DDE6F2;border-bottom-color:rgba(255,255,255,.12)}
+:root{
+  --paper:#13294B; --surface:#1B3561; --surface-2:#213E6D; --field:#102445;
+  --ink:#FFFFFF; --ink-2:#DDE6F2; --muted:#B7C6DB; --heading:#FFFFFF; --placeholder:#8094B2;
+  --line:#2F4C7A; --line-strong:#4A6794;
+  --verrou-bg:#22385C; --verrou-line:#344C74; --verrou-ink:#9AAAC2; --verrou-icon:#3E5680;
+  --solid:#2A4F86; --solid-hover:#355E9C; --on-solid:#FFFFFF;
+  --warn-soft:#243F6E; --warn-ink:#FFFFFF;
+  --green:#4CC38A; --green-soft:#1C4A45; --green-ink:#8FE6BE;
+  --error:#FF9C8F; --error-soft:#3A2638; --error-field:#22213F;
+  --focus:#8CB8E8; --focus-ring:rgba(140,184,232,.35);
+  --drop:#172F57; --drop-hover:#1E3A69;
+  --note-bg:#213E6D; --note-line:#3A5A8C; --note-ink:#FFFFFF;
+  --ac-bg:#3B3517; --ac-ink:#FFE08A; --ac-line:#C99A00;
+  color-scheme:dark;
+}
+.step{border-color:#2F4C7A}
+input::placeholder,textarea::placeholder{color:#8094B2}
+.doc-title{color:#FFFFFF}
+.ref-prefixe{color:#B7C6DB}
+.ref-champ .ref-input{color:#FFFFFF}
+.step-legend{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 6px 18px rgba(0,0,0,.25)}
