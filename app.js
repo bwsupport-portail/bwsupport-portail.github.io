@@ -45,7 +45,7 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
   /* ---------- Données de référence ---------- */
   const PANNE_REQ = ["date_panne", "km", "conditions", "symptomes", "voyants", "roulage_apres", "vehicule_roulant", "remorque", "description"];
   const SECTIONS = [
-    { key: "garage", step: "step-garage", icon: "i-garage",
+    { key: "garage", step: "step-garage", only: "garage", icon: "i-garage",
       name: { garage: "Votre garage", client: "Garage" }, miss: { garage: "votre garage", client: "le garage" },
       req: { garage: ["garage_nom", "garage_ville", "siret", "naf", "garage_contact", "garage_tel", "garage_email", "date_depot", "travaux"],
              client: ["garage_nom", "garage_ville"] } },
@@ -113,8 +113,8 @@ const CONFIG = { maxFileMb: 10, maxImageMb: 25 };
   //   false : aucune pièce ne bloque le dépôt (décision D1 : la référence ne bloque jamais un dépôt) – réglage retenu ;
   //   true  : chaque envoi doit contenir lui-même toutes les pièces obligatoires de la partie (complétude stricte).
   const BLOCAGE_SANS_CONSULTATION = false;
-  const piecesExigees = () => partie() === "garage" || consultation || BLOCAGE_SANS_CONSULTATION;
-  const piecesBloquantesManquantes = () => piecesExigees() ? DOCS.filter(d => (partie() === "garage" ? d.req : d.bloquant) && visible(d) && !files[d.key].length && !recuesDossier.has(d.key)) : [];
+  const piecesExigees = () => true;   /* 17/11/2026 : toutes les pièces obligatoires de la partie, pour les deux parties */
+  const piecesBloquantesManquantes = () => piecesExigees() ? DOCS.filter(d => d.req && visible(d) && !files[d.key].length && !recuesDossier.has(d.key)) : [];
 
   const MSG = {
     qui: "Indiquez qui remplit ce dossier.",
